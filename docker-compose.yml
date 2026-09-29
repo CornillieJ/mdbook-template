@@ -1,0 +1,7 @@
+services:
+  book:
+    build: .
+    container_name: mdbook-template
+    ports:
+      - "8080:80"
+    restart: unless-stopped

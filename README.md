@@ -33,11 +33,13 @@ entry there (and its `<script>`-driven markup from your pages) to opt out:
 
 - `levels.js` — the `.level-tabs`/`.level` overview/deep/drill tab pattern.
 - `checkmarks.js` — per-chapter "mark done" + per-question "mark as known" state, persisted in `localStorage`, with sidebar checkmarks.
-- `on-this-page.js` — a mini table-of-contents with scroll-spy highlighting, built from a page's `h2`/`h3` headings.
+- `on-this-page.js` — a left-side, fixed-in-place mini table-of-contents with scroll-spy highlighting, built from a page's `h2`/`h3` headings.
 - `pace-chooser.js` — a multi-slider calculator with a live verdict; ships with placeholder example data in the file, meant to be replaced.
 - `layer-explorer.js` — a clickable list with a detail panel and a view toggle; also ships with placeholder example data.
 
 ## Notes
 
 - `preferred-dark-theme` (not `default-dark-theme`) is the correct `book.toml` key for this mdBook version (0.5.4).
-- The on-this-page widget's CSS class is `.otp-nav`, not `.on-this-page` — the latter collides with mdBook 0.5.4's own built-in sidebar feature.
+- The on-this-page widget's CSS class is `.toc` (list id `#tocList`), not `.on-this-page` — the latter collides with mdBook 0.5.4's own built-in sidebar feature.
+- `.level-tabs` and `.toc` are both `position: fixed` (computed in JS), not `position: sticky` — mdBook's own `#mdbook-content` wrapper has `overflow: auto` but never actually scrolls, which silently breaks `position: sticky` on any descendant.
+- The "mark this chapter done" button is declared once per chapter in your Markdown, but `checkmarks.js` relocates it into `.level-tabs` at runtime so it stays reachable regardless of scroll position or which level tab is active.

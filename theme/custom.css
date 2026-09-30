@@ -19,7 +19,7 @@
    RECOLOR THE BOOK HERE — this token block is the one place to edit.
    --------------------------------------------------------------------------
    1. Brand hues (--brand-1..4): raw, saturated colors used for decoration
-      only (title underline gradient, glow behind the page title, slider
+      only (title underline gradient, slider
       track, confetti, "done" badges). They never carry body text, so any
       hue works.
    2. Per-theme text-safe tokens (--bk-*): mdBook ships five themes (light,
@@ -164,16 +164,6 @@ body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
   isolation: isolate;
 }
 .content p, .content ol, .content ul { line-height: 1.7; }
-
-/* Soft brand glow behind the top of every chapter. */
-.content main::before {
-  content: "";
-  position: absolute; z-index: -1; pointer-events: none;
-  top: 0; left: -8%; right: -8%; height: 380px;
-  background:
-    radial-gradient(closest-side, color-mix(in srgb, var(--brand-1) 10%, transparent), transparent) 0 0 / 62% 100% no-repeat,
-    radial-gradient(closest-side, color-mix(in srgb, var(--brand-2) 11%, transparent), transparent) 100% 0 / 62% 90% no-repeat;
-}
 
 .content h1, .content h2, .content h3, .content h4 {
   font-family: var(--font-sans);

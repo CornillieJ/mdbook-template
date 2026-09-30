@@ -295,7 +295,7 @@ Level keys are ignored while typing or when focus is in a quiz or deck.
 All colors live in the token block at the top of `theme/custom.css`:
 
 - `--brand-1..4`: raw brand hues used only for decoration (title
-  underline, glow, sliders, "done" badges, pace chooser bars).
+  underline, sliders, "done" badges, pace chooser bars).
 - `--bk-confetti`: the confetti palette (a comma-separated color list read
   by `celebrate.js`).
 - Per-theme blocks (`:root`/`html.light`, `html.rust`, `html.navy`,

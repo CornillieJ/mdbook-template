@@ -294,8 +294,13 @@ Level keys are ignored while typing or when focus is in a quiz or deck.
 
 All colors live in the token block at the top of `theme/custom.css`:
 
-- `--brand-1..4`: raw brand hues used only for decoration (title
-  underline, glow, sliders, "done" badges, pace chooser bars).
+- `--brand-1..4`: raw brand hues (pink, cyan, teal, yellow) used for flat
+  decoration: the four-block rule under h1, the colored marks on h2
+  rules, level-tab fills, "done" badges and pace chooser bars. Each hue
+  has one job: pink for links and primary actions, cyan for information,
+  teal for done/correct, yellow for setup and warnings.
+- `--bk-fill-1` / `--bk-on-pink`, `--bk-on-fill`: solid color blocks that
+  carry text, and the text color used on them (contrast-checked).
 - `--bk-confetti`: the confetti palette (a comma-separated color list read
   by `celebrate.js`).
 - Per-theme blocks (`:root`/`html.light`, `html.rust`, `html.navy`,

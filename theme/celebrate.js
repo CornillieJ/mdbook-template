@@ -4,8 +4,12 @@
 //
 // Confetti colors come from the --bk-confetti CSS token (a comma-separated
 // list in custom.css), so recoloring the theme recolors the confetti too.
+// The burst is deliberately small and short: a few flat paper rectangles,
+// about a third of the requested count, gone in about a second.
 (function () {
-  var COLORS = ['#EC008C', '#44C8F5', '#26A99E', '#FFD400', '#8e6cf0', '#ff7a45'];
+  var COLORS = ['#EC008C', '#44C8F5', '#26A99E', '#FFD400'];
+  // Share of the requested particle count that is actually drawn.
+  var DENSITY = 0.3;
 
   function prefersReducedMotion() {
     try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
@@ -38,17 +42,17 @@
     colors = colors && colors.length ? colors : COLORS;
     var out = [];
     for (var i = 0; i < count; i++) {
-      var angle = -Math.PI / 2 + (rand() - 0.5) * Math.PI * 1.1; // mostly upwards
-      var speed = 180 + rand() * 260;
+      var angle = -Math.PI / 2 + (rand() - 0.5) * Math.PI * 0.9; // mostly upwards
+      var speed = 120 + rand() * 170;
       out.push({
         dx: Math.cos(angle) * speed,
         dy: Math.sin(angle) * speed,
-        rot: (rand() - 0.5) * 900,
+        rot: (rand() - 0.5) * 540,
         color: colors[Math.floor(rand() * colors.length)],
-        w: 6 + Math.round(rand() * 6),
-        h: 8 + Math.round(rand() * 8),
-        round: rand() < 0.3,
-        delay: Math.round(rand() * 120),
+        w: 5 + Math.round(rand() * 3),
+        h: 9 + Math.round(rand() * 4),
+        round: false, // flat paper only
+        delay: Math.round(rand() * 80),
       });
     }
     return out;
@@ -86,7 +90,8 @@
     layer.className = 'bk-confetti';
     layer.setAttribute('aria-hidden', 'true');
     document.body.appendChild(layer);
-    var specs = particleSpecs(opts.count || 70, null, themeColors());
+    var count = Math.max(8, Math.round(Math.min(opts.count || 70, 160) * DENSITY));
+    var specs = particleSpecs(count, null, themeColors());
     specs.forEach(function (s) {
       var p = document.createElement('i');
       p.style.left = x + 'px';
@@ -100,11 +105,11 @@
         p.animate([
           { transform: 'translate(-50%,-50%) translate(0,0) rotate(0deg)', opacity: 1 },
           { transform: 'translate(-50%,-50%) translate(' + s.dx * 0.8 + 'px,' + s.dy * 0.8 + 'px) rotate(' + s.rot / 2 + 'deg)', opacity: 1, offset: 0.45 },
-          { transform: 'translate(-50%,-50%) translate(' + s.dx + 'px,' + (s.dy + 420) + 'px) rotate(' + s.rot + 'deg)', opacity: 0 },
-        ], { duration: 1300 + s.delay * 4, delay: s.delay, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'forwards' });
+          { transform: 'translate(-50%,-50%) translate(' + s.dx + 'px,' + (s.dy + 260) + 'px) rotate(' + s.rot + 'deg)', opacity: 0 },
+        ], { duration: 900 + s.delay * 3, delay: s.delay, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'forwards' });
       }
     });
-    setTimeout(function () { layer.remove(); }, 2200);
+    setTimeout(function () { layer.remove(); }, 1500);
   }
 
   if (typeof window !== 'undefined') {

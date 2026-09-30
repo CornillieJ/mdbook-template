@@ -1,51 +1,387 @@
 # mdBook Template
 
-A reusable starting point for mdBook projects: a pink/cyan/teal theme, five
-small JS widgets, and a Docker setup, with nothing project-specific left in
-it. Click "Use this template" on GitHub to start a new book from it.
+A starting point for **interactive** [mdBook](https://rust-lang.github.io/mdBook/)
+sites, especially learning guides. Out of the box you get a polished theme
+(five mdBook color themes, tuned for contrast) and a set of widgets:
+Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
+compares, self-checks, a progress map, a pace planner, and an animated
+layer explorer. Everything is driven by markup in your Markdown pages, so
+**writing a book never requires touching JavaScript**.
 
-## Usage
+The book in `src/` is both a demo and the documentation: a worked example
+chapter, a live component gallery with copy-paste markup, and a writing
+guide.
 
-With Docker:
+## Contents
 
-```sh
-docker compose up --build
+- [Quick start](#quick-start)
+- [Project layout](#project-layout)
+- [Component reference](#component-reference)
+  - [Callouts](#callouts) · [Tables](#tables) · [Checklist](#checklist)
+  - [Level tabs](#level-tabs) · [Self-check](#self-check-mark-as-known) · [Mark done](#mark-this-chapter-done)
+  - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
+  - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
+- [Keyboard shortcuts](#keyboard-shortcuts)
+- [Recoloring](#recoloring)
+- [Configuration and storage](#configuration-and-storage)
+- [Opting out of a widget](#opting-out-of-a-widget)
+- [Authoring gotchas](#authoring-gotchas)
+- [Technical notes](#technical-notes)
+- [Tests](#tests)
+
+## Quick start
+
+1. **Create your repo**: click **Use this template** on GitHub.
+2. **Name your book**: edit `title` / `authors` in `book.toml`, and set
+   `storagePrefix` in `theme/book-config.js` to a unique slug (for example
+   `"git-guide"`). Two books on the same domain would otherwise share
+   readers' progress.
+3. **Write chapters**: copy `templates/chapter.md` to `src/your-chapter.md`,
+   add it to `src/SUMMARY.md` and to the progress map in `src/README.md`.
+   Browse `src/components.md` (or the rendered *Component gallery*) for
+   every widget's markup. Delete the demo pages you don't want.
+4. **Preview**: `mdbook serve --open` (mdBook **v0.5.4**), or
+   `docker compose up --build` and open <http://localhost:8080>.
+5. **Publish**:
+   - **GitHub Pages**: in the repo, *Settings → Pages → Source: GitHub
+     Actions*, and set `site-url = "/<repo>/"` in `book.toml`. Every push to
+     `master` runs the tests, builds, and deploys
+     (`.github/workflows/deploy.yml`).
+   - **Docker**: the `Dockerfile` builds the book and serves it with nginx
+     on port 80 (`docker-compose.yml` maps it to 8080).
+   - **Anywhere else**: `mdbook build` and upload the `book/` folder.
+
+## Project layout
+
+```text
+book.toml                 title, themes, site-url, ordered CSS/JS list
+theme/
+  book-config.js          window.BookConfig: storagePrefix (+ optional trackedChapters)
+  custom.css              design tokens (recolor here) + base look
+  interactive.css         widget styles
+  head.hbs                IBM Plex Sans/Mono (mdBook injects it into <head>)
+  celebrate.js            confetti + toasts (window.Book.celebrate/toast)
+  levels.js               level tabs
+  checkmarks.js           mark done, sidebar ✓, mark as known, checklist memory
+  on-this-page.js         fixed "On this page" nav with scroll-spy
+  quiz.js  flashcards.js  code-compare.js  progress-map.js
+  pace-chooser.js  layer-explorer.js
+  *.test.js               node:test unit tests for the pure helpers
+src/                      the book (welcome, example chapter, gallery, writing guide)
+templates/chapter.md      copy-paste starter for a new chapter (not built)
+CLAUDE.md                 instructions for AI assistants working on a book
 ```
 
-Then open `http://localhost:8080`.
+## Component reference
 
-Or locally, if you have [mdBook](https://rust-lang.github.io/mdBook/) installed:
+Every snippet below is live in `src/components.md`. "Blank lines" means a
+blank line right after the opening tag and right before the closing tag,
+so mdBook renders the Markdown inside (see [gotchas](#authoring-gotchas)).
 
-```sh
-mdbook serve
+### Callouts
+
+Classes: `callout` + one of `note` (info), `setup` (prerequisites),
+`rule` (a principle), `danger` (a gotcha); `callout-label` for the title.
+
+```html
+<div class="callout danger">
+<div class="callout-label">Gotcha</div>
+
+Markdown **works** here.
+
+</div>
 ```
 
-## Recoloring the theme
+### Tables
 
-The design tokens live at the top of `theme/custom.css`, under `:root`:
-`--pink`, `--cyan`, `--teal`, `--yellow`. Change those and every component
-(callouts, checklists, tabs, the done-marks, etc.) follows. `--font-mono`,
-`--muted`, and `--faint` are typography tokens (real IBM Plex Mono, loaded
-via `theme/head.hbs` — mdBook includes this file in `<head>` automatically
-if it's present, no `book.toml` entry needed) matching
-[CornillieJ/sa](https://github.com/CornillieJ/sa)'s guide, which this
-theme's `.toc`/`.callout-label` styling is a deliberate match for.
+Plain Markdown tables are styled automatically (mdBook 0.5 already wraps
+them in a scrolling `.table-wrapper`). Wrapping in `.table-wrap` is
+optional and keeps the same framed look on other mdBook versions.
 
-## The JS widgets
+```html
+<div class="table-wrap">
 
-Each widget is wired in via `book.toml`'s `additional-js` list — remove an
-entry there (and its `<script>`-driven markup from your pages) to opt out:
+| Term | Meaning |
+|---|---|
+| a | b |
 
-- `levels.js` — the `.level-tabs`/`.level` overview/deep/drill tab pattern.
-- `checkmarks.js` — per-chapter "mark done" + per-question "mark as known" state, persisted in `localStorage`, with sidebar checkmarks.
-- `on-this-page.js` — a left-side, fixed-in-place mini table-of-contents with scroll-spy highlighting, built from a page's `h2`/`h3` headings.
-- `pace-chooser.js` — a multi-slider calculator with a live verdict; ships with placeholder example data in the file, meant to be replaced.
-- `layer-explorer.js` — a clickable list with a detail panel and a view toggle; also ships with placeholder example data.
+</div>
+```
 
-## Notes
+### Checklist
 
-- `preferred-dark-theme` (not `default-dark-theme`) is the correct `book.toml` key for this mdBook version (0.5.4).
-- The on-this-page widget's CSS class is `.toc` (list id `#tocList`), not `.on-this-page` — the latter collides with mdBook 0.5.4's own built-in sidebar feature.
-- `.level-tabs` and `.toc` are both `position: fixed` (computed in JS), not `position: sticky` — mdBook's own `#mdbook-content` wrapper has `overflow: auto` but never actually scrolls, which silently breaks `position: sticky` on any descendant.
-- The "mark this chapter done" button is declared once per chapter in your Markdown, but `checkmarks.js` relocates it into `.level-tabs` at runtime so it stays reachable regardless of scroll position or which level tab is active.
-- `on-this-page.js`'s active-item highlighting is a threshold scrollspy, not `IntersectionObserver` on the headings — a click-triggered jump can land a heading above an `IntersectionObserver` trigger band without ever crossing it. It also force-activates the last entry once you've scrolled to the end of the page, since a short final section can't otherwise be scrolled up far enough to activate normally.
+`ul.checklist`; ticks are remembered per page.
+
+```html
+<ul class="checklist">
+<li><label><input type="checkbox"><span>A task, in HTML.</span></label></li>
+</ul>
+```
+
+### Level tabs
+
+One `.level-tabs[data-levels]` bar per page; buttons with
+`data-level="overview|deep|drill"`; content in `.level.overview`,
+`.level.deep`, `.level.drill`. The level names are fixed, the button text
+is yours (e.g. "Quick look" / "In depth" / "Practice"). Optional
+`data-short` is the label on phones. The drill tab gets a badge counting
+its checklist items, self-checks, quizzes and flashcard decks. The choice
+is remembered across chapters, and links to a heading in a hidden level
+switch to that level.
+
+```html
+<div class="level-tabs" data-levels>
+  <button data-level="overview" aria-pressed="true">Overview</button>
+  <button data-level="deep" data-short="Deep">Deep Understanding</button>
+  <button data-level="drill">Drilling</button>
+</div>
+
+<div class="level overview">
+
+Markdown...
+
+</div>
+```
+
+### Self-check ("Mark as known")
+
+`details.qa` with a `summary` and a `div.ans`; the optional `div.mark`
+button toggles a remembered "known" state.
+
+```html
+<details class="qa">
+<summary>Self-check: the question?</summary>
+<div class="ans">
+The answer.
+<div class="mark"><button type="button">Mark as known</button></div>
+</div>
+</details>
+```
+
+### Mark this chapter done
+
+`[data-mark-done]`: one per chapter (usually at the end of the drill level).
+On pages with level tabs it moves into the fixed tab bar. It adds a ✓ to
+the sidebar, updates progress maps, and celebrates with
+"Chapter done! N of M complete" (M = chapters in a progress map on the
+page, else `BookConfig.trackedChapters`, else the last progress map the
+reader saw; with none, just "Chapter done!"). Optional `data-done-text`.
+
+```html
+<button type="button" data-mark-done>Mark this chapter done</button>
+```
+
+### Quiz
+
+`.quiz[data-quiz]` with `.quiz-q`, `ol.quiz-options` (mark the right `li`
+with `data-correct`) and an optional `.quiz-explain` shown once solved. A
+scoreboard appears above the page's first quiz; a perfect score gets
+confetti.
+
+```html
+<div class="quiz" data-quiz>
+<p class="quiz-q">The question?</p>
+<ol class="quiz-options">
+<li>Wrong</li>
+<li data-correct>Right</li>
+</ol>
+<p class="quiz-explain">Why.</p>
+</div>
+```
+
+### Flashcards
+
+`.flashcards[data-flashcards]` containing `.card` > `.front` + `.back`.
+Optional `data-front-label` / `data-back-label` (default "Question" /
+"Answer") and `data-title` (default "Flashcards").
+
+```html
+<div class="flashcards" data-flashcards data-front-label="Term" data-back-label="Meaning">
+<div class="card"><div class="front">Front</div><div class="back">Back</div></div>
+</div>
+```
+
+### Code compare
+
+`.code-compare[data-code-compare]` around 2–4 fenced code blocks (blank
+lines!). Side by side when wide (2 panes from 620px, 3–4 from 900px), tabs
+when narrow. Labels come from the language (`csharp` → C#, `py` → Python,
+`ts` → TypeScript, `sh` → Shell, ...; unknown languages show their raw name).
+Optional `data-labels="Before|After"`, `data-subs="v1|v2"` (grey
+sub-labels), `data-default="1"` (1-based pane shown first on narrow
+screens; default is the last pane).
+
+````html
+<div class="code-compare" data-code-compare data-labels="Before|After">
+
+```js
+old()
+```
+
+```js
+new()
+```
+
+</div>
+````
+
+### Progress map
+
+`[data-progress-map]` around a Markdown list of **Markdown links** (blank
+lines!); text after the link is the blurb. Shows done / up next /
+"Continue where you left off". Optional `data-title` ("Your progress"),
+`data-label` ("Chapter"), `data-done-text`. Up to 7 stops draw as a
+horizontal road on wide screens; longer lists stay vertical.
+
+```html
+<div data-progress-map>
+
+- [Chapter one](chapter-one.md) Short blurb
+- [Chapter two](chapter-two.md) Short blurb
+
+</div>
+```
+
+### Pace chooser
+
+`.pace-chooser[data-pace-chooser]` with a hidden `ul.pc-tasks` of
+`li[data-hours]`. The widget builds "hours per week" and "weeks available"
+sliders and a week-by-week timeline; tasks larger than a week are split
+into "part 1/2" and so on, and a shortfall is reported in hours. Text
+before a colon is the short bar label (or set `data-short` on the `li`).
+Optional `data-max-hours` (15), `data-max-weeks` (12),
+`data-default-hours` (4), `data-default-weeks` (4).
+
+```html
+<div class="pace-chooser" data-pace-chooser>
+<ul class="pc-tasks">
+<li data-hours="6">Part 1: Basics</li>
+<li data-hours="8">Part 2: Going deeper</li>
+</ul>
+</div>
+```
+
+### Layer explorer
+
+`.layer-explorer[data-layer-explorer]` with `.layer` children:
+`data-name` (required), `data-tag` (chip), `data-trace` (caption during
+the trace), inner HTML = the detail card. On the container:
+`data-entry` / `data-exit` (end nodes; omitted when absent),
+`data-return` (caption for the way back), `data-trace-label` (button
+text). `` `backticks` `` in those attributes render as code.
+
+```html
+<div class="layer-explorer" data-layer-explorer data-entry="HTTP request" data-exit="Database">
+<div class="layer" data-name="Controller" data-tag="routing" data-trace="The request lands here.">
+<p>Detail HTML shown in the card.</p>
+</div>
+</div>
+```
+
+## Keyboard shortcuts
+
+| Where | Keys |
+|---|---|
+| Any page with level tabs | <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> switch Overview / Deep / Drill |
+| Focus inside a quiz | <kbd>A</kbd>–<kbd>H</kbd> pick an option |
+| Focus on a flashcard deck | <kbd>Space</kbd>/<kbd>Enter</kbd> flip, <kbd>→</kbd> got it, <kbd>←</kbd> again, <kbd>S</kbd> shuffle, <kbd>R</kbd> restart |
+| Code compare tabs (narrow) | <kbd>←</kbd> <kbd>→</kbd> switch panes |
+| Layer explorer | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move between layers |
+
+Level keys are ignored while typing or when focus is in a quiz or deck.
+
+## Recoloring
+
+All colors live in the token block at the top of `theme/custom.css`:
+
+- `--brand-1..4`: raw brand hues used only for decoration (title
+  underline, glow, sliders, "done" badges, pace chooser bars).
+- `--bk-confetti`: the confetti palette (a comma-separated color list read
+  by `celebrate.js`).
+- Per-theme blocks (`:root`/`html.light`, `html.rust`, `html.navy`,
+  `html.coal`, `html.ayu`): `--bk-accent`, `--bk-accent-2`, `--bk-ok`,
+  `--bk-warn`, `--bk-danger` are used for text and borders, so keep them
+  readable (>= 4.5:1) against each theme's background, plus surfaces,
+  borders, shadow and focus ring.
+
+`interactive.css` only reads these tokens, so it never needs editing.
+Fonts (IBM Plex Sans/Mono) are loaded in `theme/head.hbs`; change the
+`--font-sans` / `--font-mono` tokens if you swap them.
+
+## Configuration and storage
+
+`theme/book-config.js` defines `window.BookConfig`:
+
+- `storagePrefix` (**change per book**): prefix of every localStorage key:
+  `<prefix>:level`, `<prefix>:done:<slug>`, `<prefix>:known:<slug>:<n>`,
+  `<prefix>:check:<slug>:<n>`, `<prefix>:tracked`.
+- `trackedChapters` (optional): slugs (file names without `.md`) counted
+  in "N of M chapters done".
+
+Progress never leaves the reader's browser. Every storage access is
+wrapped in try/catch, so private modes that block storage just lose
+persistence. Widgets announce changes with `book:level-changed` and
+`book:done-changed` events on `document`.
+
+## Opting out of a widget
+
+Remove its line from `additional-js` in `book.toml` (and its markup from
+your pages). `book-config.js` and `celebrate.js` are shared and should
+stay. Without JavaScript every widget degrades to readable content: quiz
+options as a list, flashcards as front/back pairs, the progress map as a
+list of links, layers as labelled paragraphs.
+
+## Authoring gotchas
+
+- **Blank lines** after `<div ...>` and before `</div>` whenever the
+  inside is Markdown; otherwise it is passed through as raw HTML.
+- **Raw-HTML widgets take HTML**: quiz, flashcards, checklist, self-check,
+  layer explorer and pace chooser content is not Markdown. Use `<code>`,
+  `<strong>`, and write `&lt;` for a literal `<`.
+- **Headings inside levels stay Markdown** (`### Title`, blank lines
+  around) so they get ids and show up in "On this page".
+- **One level-tabs bar per page.**
+- **Links**: mdBook rewrites `.md` → `.html` in Markdown links only, never
+  in raw-HTML `href`s. The progress map needs Markdown links.
+- **File names are progress keys**: renaming a chapter resets readers'
+  done/known state for it.
+- `print.html` shows every level and hides the tab bars.
+
+## Technical notes
+
+- `preferred-dark-theme` (not `default-dark-theme`) is the correct
+  `book.toml` key for this mdBook version (0.5.4).
+- The on-this-page widget's CSS class is `.toc` (list id `#tocList`), not
+  `.on-this-page`; the latter collides with mdBook 0.5.4's own built-in
+  sidebar feature.
+- `.level-tabs` and `.toc` are both `position: fixed` (placed in JS), not
+  `position: sticky`: mdBook's own `#mdbook-content` wrapper has
+  `overflow: auto` but never actually scrolls, which silently breaks
+  `position: sticky` on any descendant. `levels.js` matches the bar to the
+  content column and re-runs on resize, scroll and sidebar toggles.
+- The mark-done button is declared once per chapter in your Markdown, but
+  `checkmarks.js` relocates it into `.level-tabs` at runtime so it stays
+  reachable regardless of scroll position or which level is active.
+- `on-this-page.js`'s active-item highlighting is a threshold scrollspy,
+  not `IntersectionObserver` on the headings: a click-triggered jump can
+  land a heading above an `IntersectionObserver` trigger band without
+  ever crossing it. It also force-activates the last entry once you've
+  scrolled to the end of the page, since a short final section can't
+  otherwise be scrolled up far enough to activate normally. The nav hides
+  itself when the gutter is too narrow (for example with mdBook's sidebar
+  open below ~1600px), and appears only when the visible level has at
+  least two `h2`/`h3` headings.
+- mdBook sets `html { font-size: 62.5% }`, so the CSS uses px/em rather
+  than rem.
+- Widget layouts use CSS container queries, so they adapt to the column
+  width, not the window.
+
+## Tests
+
+```sh
+npm test            # node --test theme/*.test.js (Node 18+, no dependencies)
+mdbook build        # should finish with no warnings
+```
+
+The CI workflow runs the tests before every deploy. Each widget exports
+its pure helpers (markup parsing, scheduling, scoring) for these tests.

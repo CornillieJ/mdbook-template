@@ -1,16 +1,24 @@
+// Level tabs: one `.level-tabs[data-levels]` bar per page switches between
+// `.level.overview`, `.level.deep` and `.level.drill` blocks. The reader's
+// choice is remembered across chapters. Level NAMES are fixed; the button
+// TEXT is yours (e.g. "Quick look" / "In depth" / "Practice").
 (function () {
   var LEVELS = ['overview', 'deep', 'drill'];
-  var KEY = 'mdbook-template:level';
+  function prefix() {
+    var c = typeof window !== 'undefined' && window.BookConfig;
+    return (c && c.storagePrefix) || 'mybook';
+  }
+  function storageKey() { return prefix() + ':level'; }
   function isValidLevel(v) { return LEVELS.indexOf(v) !== -1; }
   function getStoredLevel() {
     try {
-      var v = localStorage.getItem(KEY);
+      var v = localStorage.getItem(storageKey());
       return isValidLevel(v) ? v : 'overview';
     } catch (e) { return 'overview'; }
   }
   function setStoredLevel(level) {
     if (!isValidLevel(level)) return;
-    try { localStorage.setItem(KEY, level); } catch (e) {}
+    try { localStorage.setItem(storageKey(), level); } catch (e) {}
   }
   // The level a hidden `.level` block belongs to, from its class names.
   function levelFromClasses(classNames) {
@@ -28,7 +36,7 @@
     document.querySelectorAll('.level').forEach(function (el) {
       el.style.display = el.classList.contains(level) ? '' : 'none';
     });
-    document.dispatchEvent(new CustomEvent('mdbook-template:level-changed', { detail: { level: level } }));
+    document.dispatchEvent(new CustomEvent('book:level-changed', { detail: { level: level } }));
   }
   // Sidebar and "On this page" links can point at headings inside a level
   // that is currently hidden; switch to that level so the target is visible.
@@ -66,8 +74,63 @@
       tabs.style.top = menuBarBottom + 'px';
     });
   }
+  // Keyboard 1/2/3 switches level, unless the user is typing or focus is in
+  // a widget that uses its own keys (quiz letters, flashcards).
+  function levelForKey(key) {
+    var i = ['1', '2', '3'].indexOf(key);
+    return i === -1 ? null : LEVELS[i];
+  }
+  function isTypingTarget(el) {
+    if (!el || !el.tagName) return false;
+    var tag = el.tagName.toLowerCase();
+    return tag === 'input' || tag === 'textarea' || tag === 'select' || el.isContentEditable ||
+      !!(el.closest && el.closest('[data-quiz], [data-flashcards]'));
+  }
+  // How many hands-on items the drill level holds (shown as a badge on its tab).
+  function countDrillItems(root) {
+    var n = 0;
+    root.querySelectorAll('.level.drill').forEach(function (drill) {
+      n += drill.querySelectorAll('ul.checklist > li, details.qa, [data-quiz], [data-flashcards]').length;
+    });
+    return n;
+  }
+  function addDrillCount() {
+    var n = countDrillItems(document);
+    if (!n) return;
+    document.querySelectorAll('[data-levels] button[data-level="drill"]').forEach(function (btn) {
+      if (btn.querySelector('.lt-count')) return;
+      var badge = document.createElement('span');
+      badge.className = 'lt-count';
+      badge.textContent = n;
+      badge.setAttribute('aria-label', n + ' exercises');
+      btn.appendChild(badge);
+    });
+  }
+  function addKeyHints() {
+    document.querySelectorAll('[data-levels] button[data-level]').forEach(function (btn) {
+      var i = LEVELS.indexOf(btn.getAttribute('data-level'));
+      if (i !== -1 && !btn.title) btn.title = 'Shortcut: ' + (i + 1);
+    });
+  }
+  function isPrintPage() {
+    return /(^|\/)print\.html$/.test(location.pathname);
+  }
   function wire() {
+    // mdBook's print.html inlines every chapter: show every level there and
+    // hide the tab bars (custom.css keys off html.bk-print).
+    if (isPrintPage()) { document.documentElement.classList.add('bk-print'); return; }
     var level = getStoredLevel();
+    addDrillCount();
+    addKeyHints();
+    document.addEventListener('keydown', function (e) {
+      if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (isTypingTarget(e.target)) return;
+      var next = levelForKey(e.key);
+      if (!next || !document.querySelector('[data-levels]')) return;
+      setStoredLevel(next);
+      apply(next);
+      positionTabs();
+    });
     apply(level);
     positionTabs();
     window.addEventListener('resize', positionTabs);
@@ -107,6 +170,9 @@
       LEVELS: LEVELS,
       getStoredLevel: getStoredLevel,
       setStoredLevel: setStoredLevel,
+      storageKey: storageKey,
+      levelForKey: levelForKey,
+      countDrillItems: countDrillItems,
     };
   }
 })();

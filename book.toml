@@ -1,17 +1,39 @@
 [book]
-title = "mdBook Template"
-authors = ["Your Name"]
+title = "My Interactive Book"            # CHANGE ME
+authors = ["Your Name"]                   # CHANGE ME
+description = "An interactive learning guide built with mdBook."
 language = "en"
 src = "src"
 
 [output.html]
 default-theme = "light"
+# The theme used when the reader's OS asks for dark mode. (This mdBook
+# version calls it preferred-dark-theme, not default-dark-theme.)
 preferred-dark-theme = "navy"
-additional-css = ["theme/custom.css"]
+
+# Set site-url when the book is served from a sub-path. For a GitHub Pages
+# project site (https://<user>.github.io/<repo>/) that is "/<repo>/", and the
+# 404 page needs it to load its CSS. Leave it commented out for
+# `mdbook serve`, Docker, or a site served at the domain root.
+# site-url = "/my-book/"
+
+# Adds a GitHub icon linking to the repository in the top bar.
+# git-repository-url = "https://github.com/<user>/<repo>"
+
+# Order matters: book-config.js defines window.BookConfig and must load
+# first; celebrate.js (confetti + toasts) is used by the widgets after it.
+# To drop a widget, remove its line here (and its markup from your pages).
+additional-css = ["theme/custom.css", "theme/interactive.css"]
 additional-js = [
+    "theme/book-config.js",
+    "theme/celebrate.js",
     "theme/levels.js",
     "theme/checkmarks.js",
     "theme/on-this-page.js",
+    "theme/quiz.js",
+    "theme/flashcards.js",
+    "theme/code-compare.js",
+    "theme/progress-map.js",
     "theme/pace-chooser.js",
     "theme/layer-explorer.js",
 ]

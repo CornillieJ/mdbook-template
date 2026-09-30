@@ -1,4 +1,12 @@
 # Summary
 
-- [Chapter 1](chapter_1.md)
-- [Chapter 2](chapter_2.md)
+[Welcome](README.md)
+
+# Start
+
+- [Example chapter: HTTP caching in 20 minutes](example-chapter.md)
+
+# Reference
+
+- [Component gallery](components.md)
+- [Writing guide](writing-guide.md)

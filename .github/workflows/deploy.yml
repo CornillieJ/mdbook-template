@@ -1,0 +1,50 @@
+# Builds the book and publishes it to GitHub Pages on every push to master.
+#
+# One-time setup for a new repository created from this template:
+#   1. Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+#   2. In book.toml, set  site-url = "/<repo>/"  (the path the site is served
+#      under: https://<user>.github.io/<repo>/). Without it the 404 page
+#      loads without styles. Not needed for a custom domain at the root.
+#   3. If your default branch is "main", change the branch below.
+name: Deploy mdBook to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test theme widgets
+        run: node --test theme/*.test.js
+      - name: Install mdBook
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.5.4/mdbook-v0.5.4-x86_64-unknown-linux-gnu.tar.gz | tar -xz -C "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Build book
+        run: mdbook build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: book
+      - uses: actions/deploy-pages@v4
+        id: deployment

@@ -2,8 +2,9 @@
 
 This repo is a template for interactive mdBook sites (learning guides
 especially). Readers get level tabs, quizzes, flashcards, code compares,
-self-checks, a progress map, a pace chooser and a layer explorer, all driven
-by markup in the Markdown pages. **Writing a book never requires editing JS.**
+self-checks, a progress map, a pace chooser, a layer explorer, an annotated
+code walkthrough and themed Mermaid diagrams, all driven by markup in the
+Markdown pages. **Writing a book never requires editing JS.**
 
 ## Where things live
 
@@ -47,6 +48,8 @@ by markup in the Markdown pages. **Writing a book never requires editing JS.**
 - Progress map: `<div data-progress-map>` + blank line + Markdown list `- [Title](file.md) blurb` + blank line + `</div>`; optional `data-title`, `data-label`, `data-done-text`.
 - Pace chooser: `<div class="pace-chooser" data-pace-chooser><ul class="pc-tasks"><li data-hours="6">Short: Long label</li></ul></div>`; optional `data-short` on li, `data-max-hours`, `data-max-weeks`, `data-default-hours`, `data-default-weeks`.
 - Layer explorer: `<div class="layer-explorer" data-layer-explorer data-entry=".." data-exit="..">` + `<div class="layer" data-name=".." data-tag=".." data-trace="..">detail HTML</div>`; optional `data-return`, `data-trace-label`; `backticks` in entry/exit/trace/return become code.
+- Code walkthrough: `<div class="code-walk" data-code-walk>` + blank line + a fenced code block with `// (1)`-style trailing markers (`//`, `#`, `--`, `;`, `%`, `/* */`, `<!-- -->` all recognized) + blank line + a plain `<ol>` of explanations, numbered to match + blank line + `</div>`. No JS: still reads as code + a numbered list.
+- Mermaid diagram: a plain ` ```mermaid ` fenced code block, no wrapper div. Lazy-loads mermaid from a CDN only on pages that use it; themed from `--ia-*`/`--bg`/`--fg`, re-renders on theme switch. Zoom buttons, ctrl/cmd+wheel, drag-to-pan, keyboard `+`/`-`/`0`, and a "view source" toggle.
 
 ## Authoring rules
 

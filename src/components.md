@@ -367,6 +367,83 @@ Leave out `data-entry` / `data-exit` to drop the end nodes. Optional:
 `data-return` (caption for the trip back up) and `data-trace-label`
 (button text).
 
+## Code walkthrough
+
+A fenced code block plus a plain numbered list. Mark the line a note is
+about with a trailing `(N)` in a comment; click the badge it turns into
+(or press its digit key) to read that note below the code. Works with
+`//`, `#`, `--`, `;`, `%`, `/* */` and `<!-- -->`, so it reads the same
+regardless of language.
+
+<div class="code-walk" data-code-walk>
+
+```js
+function clamp(value, min, max) { // (1)
+  if (value < min) return min;    // (2)
+  if (value > max) return max;    // (3)
+  return value;
+}
+```
+
+1. Guard clauses instead of nested `if`/`else`: each condition exits immediately.
+2. The lower-bound check returns `min` as soon as `value` dips below it.
+3. Same idea for the upper bound; falling through both means the value was already in range.
+
+</div>
+
+````html
+<div class="code-walk" data-code-walk>
+
+```js
+function clamp(value, min, max) { // (1)
+  if (value < min) return min;    // (2)
+  return value;
+}
+```
+
+1. First note.
+2. Second note.
+
+</div>
+````
+
+Numbers are 1-based and must match a note's position in the list below
+the code — write them in whatever order reads best. "Expand all" shows
+every note stacked at once, handy for printing or a linear read.
+Without JavaScript the page still reads fine: code, then a plain
+numbered list of notes underneath it.
+
+## Mermaid diagram
+
+A plain ` ```mermaid ` fenced block — no wrapper `<div>`, the same
+convention every mermaid-aware tool already uses. It's themed to match
+whichever of the book's five color themes the reader has picked, and
+re-renders the instant they switch themes.
+
+```mermaid
+flowchart LR
+  A[Browser] --> B[Controller]
+  B --> C[Service]
+  C --> D[(Database)]
+  C --> E[Cache]
+```
+
+````markdown
+```mermaid
+flowchart LR
+  A[Browser] --> B[Controller]
+  B --> C[Service]
+  C --> D[(Database)]
+```
+````
+
+Drag to pan, use the toolbar's `−`/`+`/reset, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>
++ scroll, or <kbd>+</kbd>/<kbd>-</kbd>/<kbd>0</kbd> once the diagram has
+focus. The `</>` button reveals the raw diagram text to copy. A typo in
+the diagram shows a themed error card instead of Mermaid's default
+output. Mermaid itself loads from a CDN, and only on pages that actually
+have a diagram — most pages pay nothing for it.
+
 ## Mark this chapter done
 
 One per chapter, usually at the end of the drill level. On pages with

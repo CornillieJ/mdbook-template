@@ -43,6 +43,8 @@ picks up automatically.
 | memorise vocabulary | flashcards |
 | explain in their own words first | self-check (`.qa`) |
 | see how parts fit together | layer explorer |
+| understand real code line by line | code walkthrough |
+| see an architecture, flow or ER diagram | a Mermaid diagram |
 | plan their time | pace chooser (once, on a "how to use this book" page) |
 | see how far they are | progress map (landing page) |
 
@@ -93,7 +95,9 @@ Without the blank lines, everything inside is passed through as raw HTML.
   `<strong>`, `<em>`, and write `&lt;` for a literal `<` (as in
   `List&lt;int&gt;`).
 - **Code compare is the exception**: its code blocks are Markdown fences,
-  so it needs the blank lines.
+  so it needs the blank lines. The code walkthrough's fenced block +
+  trailing `<ol>` of notes work the same way, and a Mermaid diagram is
+  just a plain ` ```mermaid ` fence with no wrapper at all.
 - **Progress map entries are Markdown links to `.md` files.** mdBook
   rewrites `.md` links to `.html` in Markdown, never inside raw HTML
   `href`s. The same goes for any link you write: prefer

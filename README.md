@@ -4,8 +4,9 @@ A starting point for **interactive** [mdBook](https://rust-lang.github.io/mdBook
 sites, especially learning guides. Out of the box you get a polished theme
 (five mdBook color themes, tuned for contrast) and a set of widgets:
 Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
-compares, self-checks, a progress map, a pace planner, and an animated
-layer explorer. Everything is driven by markup in your Markdown pages, so
+compares, self-checks, a progress map, a pace planner, an animated layer
+explorer, a numbered code walkthrough, and themed, zoomable Mermaid
+diagrams. Everything is driven by markup in your Markdown pages, so
 **writing a book never requires touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
@@ -21,6 +22,7 @@ guide.
   - [Level tabs](#level-tabs) · [Self-check](#self-check-mark-as-known) · [Mark done](#mark-this-chapter-done)
   - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
+  - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -66,6 +68,8 @@ theme/
   on-this-page.js         fixed "On this page" nav with scroll-spy
   quiz.js  flashcards.js  code-compare.js  progress-map.js
   pace-chooser.js  layer-explorer.js
+  code-walk.js            annotated code walkthrough
+  mermaid-diagram.js       themed, zoomable Mermaid diagrams (lazy-loads mermaid from a CDN)
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -278,6 +282,54 @@ text). `` `backticks` `` in those attributes render as code.
 </div>
 ```
 
+### Code walkthrough
+
+`.code-walk[data-code-walk]` around a single fenced code block (blank
+lines!) plus a plain `<ol>` of explanations. Mark the line a note is
+about with a trailing `(N)` inside a comment — `//`, `#`, `--`, `;`, `%`,
+`/* */` and `<!-- -->` are all recognized, so it works across languages.
+N is 1-based and must match that note's position in the list. Each
+marker becomes a small clickable badge; clicking one (or pressing its
+digit key) opens that note in a card below the code. "Expand all" shows
+every note at once. Without JavaScript it still reads as code followed
+by a numbered list.
+
+````html
+<div class="code-walk" data-code-walk>
+
+```js
+function clamp(value, min, max) { // (1)
+  if (value < min) return min;    // (2)
+  return value;
+}
+```
+
+1. Guard clauses instead of nested `if`/`else`.
+2. Returns as soon as the lower bound is violated.
+
+</div>
+````
+
+### Mermaid diagram
+
+A plain ` ```mermaid ` fenced code block — no wrapper markup at all, the
+same convention every other mermaid-aware tool uses. `mermaid-diagram.js`
+lazy-loads [Mermaid](https://mermaid.js.org/) from a CDN only on pages
+that actually contain one, themes it from the book's own `--ia-*`/`--bg`/
+`--fg` tokens (so it matches whichever of the 5 mdBook themes the reader
+has picked), and re-renders automatically the instant they switch themes.
+Zoom with the toolbar buttons, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+scroll, or
+<kbd>+</kbd>/<kbd>-</kbd>/<kbd>0</kbd> when the diagram is focused; drag
+to pan. The `</>` button reveals the raw diagram source. A bad diagram
+shows a themed error card instead of Mermaid's default output.
+
+````markdown
+```mermaid
+flowchart LR
+  A[Request] --> B[Controller] --> C[(Database)]
+```
+````
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -287,6 +339,8 @@ text). `` `backticks` `` in those attributes render as code.
 | Focus on a flashcard deck | <kbd>Space</kbd>/<kbd>Enter</kbd> flip, <kbd>→</kbd> got it, <kbd>←</kbd> again, <kbd>S</kbd> shuffle, <kbd>R</kbd> restart |
 | Code compare tabs (narrow) | <kbd>←</kbd> <kbd>→</kbd> switch panes |
 | Layer explorer | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move between layers |
+| Focus on a code-walk badge | <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> move between notes, digit keys jump to one |
+| Focus on a Mermaid diagram | <kbd>+</kbd> <kbd>-</kbd> zoom, <kbd>0</kbd> reset, drag to pan, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+scroll to zoom |
 
 Level keys are ignored while typing or when focus is in a quiz or deck.
 
@@ -329,7 +383,11 @@ Remove its line from `additional-js` in `book.toml` (and its markup from
 your pages). `book-config.js` and `celebrate.js` are shared and should
 stay. Without JavaScript every widget degrades to readable content: quiz
 options as a list, flashcards as front/back pairs, the progress map as a
-list of links, layers as labelled paragraphs.
+list of links, layers as labelled paragraphs, a code walkthrough as code
+followed by a numbered list, and a Mermaid diagram as its own source text
+inside a code block. `mermaid-diagram.js` additionally only fetches
+Mermaid from the CDN on pages that contain a diagram — pages without one
+never pay for it.
 
 ## Authoring gotchas
 
@@ -375,6 +433,16 @@ list of links, layers as labelled paragraphs.
   than rem.
 - Widget layouts use CSS container queries, so they adapt to the column
   width, not the window.
+- `mermaid-diagram.js` is the one widget that reaches outside the book: it
+  loads `mermaid@11` from jsdelivr's CDN at runtime (no npm dependency,
+  nothing bundled) the first time a page with a diagram is opened. A
+  book built and read entirely offline, or behind a CSP that blocks
+  jsdelivr, needs to self-host that script and change `MERMAID_SRC`.
+- A ` ```mermaid ` block makes mdBook's own highlight.js print a harmless
+  "Could not find the language 'mermaid'" console warning before our
+  script replaces it with the rendered diagram. It's cosmetic only (zero
+  `mdbook build` warnings, nothing visibly broken) and comes from
+  highlight.js itself, not from this template.
 
 ## Tests
 

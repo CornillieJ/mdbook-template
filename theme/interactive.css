@@ -1,6 +1,7 @@
 /* ==========================================================================
    Interactive widgets: quiz, flashcards, code-compare, progress map,
-   pace chooser timeline, layer explorer diagram, celebrations.
+   pace chooser timeline, layer explorer diagram, code walkthrough, mermaid
+   diagrams, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -29,12 +30,13 @@
 }
 
 /* Shared button look for widget controls */
-.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn {
+.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
 .fc-ready:focus-visible, .fc-ready button:focus-visible, .cc-tab:focus-visible,
-.layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible {
+.layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
+.cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -557,3 +559,82 @@
 }
 /* Widget parts toggled with the hidden attribute must stay hidden. */
 .fc-ready [hidden], .quiz-result[hidden], .pm-ready [hidden] { display: none !important; }
+
+/* ==========================================================================
+   Code walkthrough
+   ========================================================================== */
+.code-walk.cw-ready { margin: 1.2em 0; }
+.code-walk.cw-ready pre { margin-bottom: 0; }
+/* The badge sits inline, where the stripped comment marker used to be. */
+.cw-badge {
+  display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; margin: 0 0.15em;
+  border: none; border-radius: 999px; background: var(--ia-surface-2); color: var(--ia-muted);
+  font-family: var(--ia-mono); font-size: 0.78em; font-weight: 700; line-height: 1;
+  vertical-align: 0.1em; transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+.cw-badge:hover { background: var(--ia-accent-2); color: var(--ia-accent-contrast); }
+.cw-badge:active { transform: scale(0.9); }
+.cw-badge-active { background: var(--ia-accent); color: var(--ia-accent-contrast); }
+.cw-panel { margin-top: 0.7em; }
+.cw-count { margin: 0 0 0.5em; font-size: 0.82em; color: var(--ia-muted); display: flex; align-items: center; gap: 0.7em; flex-wrap: wrap; }
+.cw-expand {
+  border: 1.5px solid var(--ia-border); border-radius: 999px; padding: 0.3em 0.85em; font-size: 0.82em;
+  font-weight: 600; background: transparent; color: inherit; transition: border-color 0.15s, background 0.15s;
+}
+.cw-expand:hover { border-color: var(--ia-accent-2); color: var(--ia-accent-2); }
+.cw-card:empty { display: none; }
+.cw-note + .cw-note { margin-top: 0.6em; }
+.cw-note {
+  display: flex; gap: 0.7em; border: 1px solid var(--ia-border); border-left: 4px solid var(--ia-accent);
+  border-radius: var(--ia-radius); background: var(--ia-surface); padding: 0.75em 0.9em;
+  animation: ia-reveal 0.25s ease-out;
+}
+.cw-note-num {
+  flex: none; width: 1.6em; height: 1.6em; display: grid; place-items: center; border-radius: 6px;
+  font-family: var(--ia-mono); font-weight: 700; font-size: 0.8em; background: var(--ia-accent); color: var(--ia-accent-contrast);
+}
+.cw-note-body { line-height: 1.55; overflow-wrap: anywhere; }
+.cw-note-body > :first-child { margin-top: 0; }
+.cw-note-body > :last-child { margin-bottom: 0; }
+.cw-note-body code { font-size: 0.85em; }
+/* Without JavaScript the notes still read as a plain numbered list under the code. */
+
+/* ==========================================================================
+   Mermaid diagrams
+   ========================================================================== */
+.mmd-diagram {
+  position: relative; margin: 1.2em 0; border: 1px solid var(--ia-border); border-radius: var(--ia-radius);
+  background: var(--ia-surface); overflow: hidden;
+}
+.mmd-viewport { overflow: hidden; cursor: grab; touch-action: none; }
+.mmd-diagram.mmd-panning .mmd-viewport { cursor: grabbing; }
+.mmd-stage { transform-origin: 0 0; transition: transform 0.12s ease-out; padding: 1.2em; width: fit-content; min-width: 100%; box-sizing: border-box; }
+.mmd-diagram.mmd-panning .mmd-stage { transition: none; }
+.mmd-stage svg { display: block; max-width: 100%; height: auto; }
+.mmd-toolbar {
+  position: absolute; top: 0.5em; right: 0.5em; display: flex; gap: 0.3em; z-index: 1;
+  opacity: 0.35; transition: opacity 0.15s;
+}
+.mmd-diagram:hover .mmd-toolbar, .mmd-diagram:focus-within .mmd-toolbar { opacity: 1; }
+.mmd-btn {
+  width: 2em; height: 2em; display: grid; place-items: center; border: 1px solid var(--ia-border);
+  border-radius: 6px; background: var(--bg, var(--ia-surface-2)); color: inherit;
+  font-family: var(--ia-mono); font-size: 0.85em; line-height: 1; transition: border-color 0.15s, color 0.15s;
+}
+.mmd-btn:hover { border-color: var(--ia-accent-2); color: var(--ia-accent-2); }
+.mmd-btn[aria-pressed="true"] { border-color: var(--ia-accent); color: var(--ia-accent); }
+.mmd-source {
+  margin: 0; padding: 0.8em 1em; border-top: 1px solid var(--ia-border); max-height: 16em; overflow: auto;
+  font-size: 0.85em; background: var(--ia-surface-2);
+}
+.mmd-diagram:not(.mmd-source-open) .mmd-source { display: none; }
+.mmd-status { padding: 1.4em; text-align: center; color: var(--ia-muted); font-size: 0.9em; }
+.mmd-error {
+  margin: 0; padding: 0.9em 1em; border-left: 4px solid var(--ia-danger); background: var(--ia-surface);
+  font-size: 0.88em; line-height: 1.5;
+}
+.mmd-error strong { color: var(--ia-danger); }
+.mmd-error pre { margin: 0.5em 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.92em; }
+@media (prefers-reduced-motion: reduce) {
+  .mmd-stage, .cw-note { transition: none; animation: none; }
+}

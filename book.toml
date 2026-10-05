@@ -36,4 +36,6 @@ additional-js = [
     "theme/progress-map.js",
     "theme/pace-chooser.js",
     "theme/layer-explorer.js",
+    "theme/code-walk.js",
+    "theme/mermaid-diagram.js",
 ]

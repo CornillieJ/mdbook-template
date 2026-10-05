@@ -46,6 +46,7 @@ picks up automatically.
 | understand real code line by line | code walkthrough |
 | see an architecture, flow or ER diagram | a Mermaid diagram |
 | see what changed in a small patch | diff view |
+| show equivalent ways to do the same thing | copy as |
 | plan their time | pace chooser (once, on a "how to use this book" page) |
 | see how far they are | progress map (landing page) |
 

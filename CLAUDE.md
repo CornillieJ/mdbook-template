@@ -3,9 +3,9 @@
 This repo is a template for interactive mdBook sites (learning guides
 especially). Readers get level tabs, quizzes, flashcards, code compares,
 self-checks, a progress map, a pace chooser, a layer explorer, an annotated
-code walkthrough, themed Mermaid diagrams and a three-way diff view, all
-driven by markup in the Markdown pages. **Writing a book never requires
-editing JS.**
+code walkthrough, themed Mermaid diagrams, a three-way diff view and a
+"copy as" picker, all driven by markup in the Markdown pages. **Writing a
+book never requires editing JS.**
 
 ## Where things live
 
@@ -14,8 +14,8 @@ editing JS.**
 - `theme/book-config.js`: `window.BookConfig`. Set `storagePrefix` to a
   unique slug per book (localStorage keys are `<prefix>:level`,
   `<prefix>:done:<slug>`, `<prefix>:known:<slug>:<i>`,
-  `<prefix>:check:<slug>:<i>`, `<prefix>:tracked`). Optional
-  `trackedChapters: ['slug', ...]`.
+  `<prefix>:check:<slug>:<i>`, `<prefix>:tracked`, `<prefix>:copyas-pref`).
+  Optional `trackedChapters: ['slug', ...]`.
 - `theme/custom.css`: design tokens (recolor ONLY in the token block at the
   top: `--brand-1..4`, `--bk-confetti`, per-theme `--bk-*` for light, rust,
   navy, coal, ayu) + base styles. `theme/interactive.css`: widget styles.
@@ -52,6 +52,7 @@ editing JS.**
 - Code walkthrough: `<div class="code-walk" data-code-walk>` + blank line + a fenced code block with `// (1)`-style trailing markers (`//`, `#`, `--`, `;`, `%`, `/* */`, `<!-- -->` all recognized) + blank line + a plain `<ol>` of explanations, numbered to match + blank line + `</div>`. No JS: still reads as code + a numbered list.
 - Mermaid diagram: a plain ` ```mermaid ` fenced code block, no wrapper div. Lazy-loads mermaid from a CDN only on pages that use it; themed from `--ia-*`/`--bg`/`--fg`, re-renders on theme switch. Zoom buttons, ctrl/cmd+wheel, drag-to-pan, keyboard `+`/`-`/`0`, and a "view source" toggle.
 - Diff view: `<div class="diff-view" data-diff-view>` + blank line + a fenced ` ```diff ` block (raw `git diff` output works — `diff --git`/`index`/`---`/`+++`/`@@` lines are stripped) + blank line + `</div>`. Three tabs: Before/Diff/After. Optional `data-labels="Before|Diff|After"`, `data-default="before|diff|after"` (default `diff`).
+- Copy as: `<div class="copy-as" data-copy-as data-labels="A|B|C">` + blank line + 2+ fenced blocks (one shown at a time, never side by side) + blank line + `</div>`. `data-labels` is required (not guessed from language). Optional `data-default="2"` (1-based). The reader's pick is remembered site-wide (`<prefix>:copyas-pref`), so it carries over to every copy-as block on every page.
 
 ## Authoring rules
 

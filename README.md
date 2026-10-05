@@ -6,8 +6,9 @@ sites, especially learning guides. Out of the box you get a polished theme
 Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
 compares, self-checks, a progress map, a pace planner, an animated layer
 explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
-and a three-way diff view. Everything is driven by markup in your
-Markdown pages, so **writing a book never requires touching JavaScript**.
+a three-way diff view, and a "copy as" picker for equivalent snippets.
+Everything is driven by markup in your Markdown pages, so **writing a
+book never requires touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -23,6 +24,7 @@ guide.
   - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
   - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
+  - [Copy as](#copy-as)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -71,6 +73,7 @@ theme/
   code-walk.js            annotated code walkthrough
   mermaid-diagram.js       themed, zoomable Mermaid diagrams (lazy-loads mermaid from a CDN)
   diff-view.js            Before / Diff / After view of one patch
+  copy-as.js              pick one of several equivalent snippets; pick remembered site-wide
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -353,6 +356,37 @@ independently-written blocks; diff view is for a single small patch.
 </div>
 ````
 
+### Copy as
+
+`.copy-as[data-copy-as]` around 2+ fenced blocks (blank lines!) that are
+equivalent ways of doing the same thing, shown one at a time via a row
+of pills — never side by side, since there's no "compare" value in
+seeing the yarn command next to the pnpm command. `data-labels="A|B|C"`
+is **required** (pipe-separated): unlike code compare, labels can't be
+guessed from the language. Optional `data-default="2"` (1-based) picks
+the starting pane when the reader has no stored preference yet. The
+reader's last pick is remembered **for the whole book**, not just this
+block: choosing "yarn" once opens every `copy-as` block on "yarn" from
+then on, on any page.
+
+````html
+<div class="copy-as" data-copy-as data-labels="npm|yarn|pnpm">
+
+```bash
+npm install mdbook-template
+```
+
+```bash
+yarn add mdbook-template
+```
+
+```bash
+pnpm add mdbook-template
+```
+
+</div>
+````
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -365,6 +399,7 @@ independently-written blocks; diff view is for a single small patch.
 | Focus on a code-walk badge | <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> move between notes, digit keys jump to one |
 | Focus on a Mermaid diagram | <kbd>+</kbd> <kbd>-</kbd> zoom, <kbd>0</kbd> reset, drag to pan, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+scroll to zoom |
 | Diff view tabs | <kbd>←</kbd> <kbd>→</kbd> switch Before/Diff/After |
+| Copy as pills | <kbd>←</kbd> <kbd>→</kbd> switch the visible snippet |
 
 Level keys are ignored while typing or when focus is in a quiz or deck.
 
@@ -392,7 +427,9 @@ Fonts (IBM Plex Sans/Mono) are loaded in `theme/head.hbs`; change the
 
 - `storagePrefix` (**change per book**): prefix of every localStorage key:
   `<prefix>:level`, `<prefix>:done:<slug>`, `<prefix>:known:<slug>:<n>`,
-  `<prefix>:check:<slug>:<n>`, `<prefix>:tracked`.
+  `<prefix>:check:<slug>:<n>`, `<prefix>:tracked`, `<prefix>:copyas-pref`
+  (the reader's last-picked "copy as" label, shared across every block in
+  the book).
 - `trackedChapters` (optional): slugs (file names without `.md`) counted
   in "N of M chapters done".
 
@@ -409,8 +446,9 @@ stay. Without JavaScript every widget degrades to readable content: quiz
 options as a list, flashcards as front/back pairs, the progress map as a
 list of links, layers as labelled paragraphs, a code walkthrough as code
 followed by a numbered list, a Mermaid diagram as its own source text
-inside a code block, and a diff view as a plain ` ```diff ` block (still
-colored by highlight.js's built-in diff grammar, just not switchable).
+inside a code block, a diff view as a plain ` ```diff ` block (still
+colored by highlight.js's built-in diff grammar, just not switchable),
+and a copy-as block as a plain sequence of equivalent fenced snippets.
 `mermaid-diagram.js` additionally only fetches Mermaid from the CDN on
 pages that contain a diagram — pages without one never pay for it.
 

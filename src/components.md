@@ -483,6 +483,55 @@ Reach for **code compare** instead when you want two complete,
 independently-written blocks side by side; diff view is for a single
 small patch.
 
+## Copy as
+
+Two or more fenced blocks that are **equivalent forms of the same
+thing** — pick one, see just that one. Unlike code compare, these never
+show side by side: showing the yarn command next to the pnpm command
+helps no one, the reader just wants the one for their tool. The pick is
+remembered for the whole book (not just this block), so choosing "yarn"
+once opens every copy-as block on "yarn" from then on, on any page.
+
+<div class="copy-as" data-copy-as data-labels="npm|yarn|pnpm">
+
+```bash
+npm install mdbook-template
+```
+
+```bash
+yarn add mdbook-template
+```
+
+```bash
+pnpm add mdbook-template
+```
+
+</div>
+
+````html
+<div class="copy-as" data-copy-as data-labels="npm|yarn|pnpm">
+
+```bash
+npm install mdbook-template
+```
+
+```bash
+yarn add mdbook-template
+```
+
+```bash
+pnpm add mdbook-template
+```
+
+</div>
+````
+
+`data-labels` is required (pipe-separated): unlike code compare, labels
+can't be guessed from the language — three bash blocks would all just
+say "Shell". <kbd>←</kbd> <kbd>→</kbd> move between pills once one has
+focus. Optional `data-default="2"` (1-based) picks the starting pane
+when the reader has no stored preference yet; defaults to the first.
+
 ## Mark this chapter done
 
 One per chapter, usually at the end of the drill level. On pages with

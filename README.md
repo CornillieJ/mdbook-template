@@ -6,8 +6,9 @@ sites, especially learning guides. Out of the box you get a polished theme
 Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
 compares, self-checks, a progress map, a pace planner, an animated layer
 explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
-and a three-way diff view. Everything is driven by markup in your
-Markdown pages, so **writing a book never requires touching JavaScript**.
+a three-way diff view, and a history timeline. Everything is driven by
+markup in your Markdown pages, so **writing a book never requires
+touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -22,7 +23,7 @@ guide.
   - [Level tabs](#level-tabs) · [Self-check](#self-check-mark-as-known) · [Mark done](#mark-this-chapter-done)
   - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
-  - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
+  - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view) · [Timeline](#timeline)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -71,6 +72,7 @@ theme/
   code-walk.js            annotated code walkthrough
   mermaid-diagram.js       themed, zoomable Mermaid diagrams (lazy-loads mermaid from a CDN)
   diff-view.js            Before / Diff / After view of one patch
+  timeline.js             a markdown list as a vertical dated timeline
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -353,6 +355,23 @@ independently-written blocks; diff view is for a single small patch.
 </div>
 ````
 
+### Timeline
+
+`.timeline[data-timeline]` around a plain Markdown list (blank lines!).
+Each item's leading `**bold**` text is the stop's label; the rest is its
+body (inline Markdown like `code` or links works). Renders as a vertical
+line of dots — every entry's full text stays visible, nothing collapses.
+Optional `data-title`. "Oldest"/"Latest" buttons jump to either end.
+
+```html
+<div class="timeline" data-timeline data-title="Project history">
+
+- **2024-01** First working prototype.
+- **2024-06** Rewritten as a proper CLI.
+
+</div>
+```
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -365,6 +384,7 @@ independently-written blocks; diff view is for a single small patch.
 | Focus on a code-walk badge | <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> move between notes, digit keys jump to one |
 | Focus on a Mermaid diagram | <kbd>+</kbd> <kbd>-</kbd> zoom, <kbd>0</kbd> reset, drag to pan, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+scroll to zoom |
 | Diff view tabs | <kbd>←</kbd> <kbd>→</kbd> switch Before/Diff/After |
+| Focus on a timeline dot | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move between stops |
 
 Level keys are ignored while typing or when focus is in a quiz or deck.
 
@@ -409,9 +429,10 @@ stay. Without JavaScript every widget degrades to readable content: quiz
 options as a list, flashcards as front/back pairs, the progress map as a
 list of links, layers as labelled paragraphs, a code walkthrough as code
 followed by a numbered list, a Mermaid diagram as its own source text
-inside a code block, and a diff view as a plain ` ```diff ` block (still
-colored by highlight.js's built-in diff grammar, just not switchable).
-`mermaid-diagram.js` additionally only fetches Mermaid from the CDN on
+inside a code block, a diff view as a plain ` ```diff ` block (still
+colored by highlight.js's built-in diff grammar, just not switchable),
+and a timeline as a plain bulleted list. `mermaid-diagram.js` additionally
+only fetches Mermaid from the CDN on
 pages that contain a diagram — pages without one never pay for it.
 
 ## Authoring gotchas

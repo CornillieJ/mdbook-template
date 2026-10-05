@@ -444,6 +444,45 @@ the diagram shows a themed error card instead of Mermaid's default
 output. Mermaid itself loads from a CDN, and only on pages that actually
 have a diagram — most pages pay nothing for it.
 
+## Diff view
+
+One fenced ` ```diff ` block, switchable between three views: **Diff**
+(colored +/− lines), **Before** (the file as it was), **After** (the
+file as it is now). Paste raw `git diff` output straight in — the
+`diff --git`/`index`/`---`/`+++`/`@@` boilerplate lines are recognized
+and dropped from every view.
+
+<div class="diff-view" data-diff-view>
+
+```diff
+ function clamp(value, min, max) {
+-  if (value < min) return value;
++  if (value < min) return min;
+   return value;
+ }
+```
+
+</div>
+
+````html
+<div class="diff-view" data-diff-view>
+
+```diff
+ unchanged line
+-old line
++new line
+```
+
+</div>
+````
+
+<kbd>←</kbd> <kbd>→</kbd> move between the three tabs once one has focus.
+Optional: `data-labels="Before|Diff|After"` renames the buttons,
+`data-default="before"` picks which view opens first (default `diff`).
+Reach for **code compare** instead when you want two complete,
+independently-written blocks side by side; diff view is for a single
+small patch.
+
 ## Mark this chapter done
 
 One per chapter, usually at the end of the drill level. On pages with

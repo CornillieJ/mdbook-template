@@ -5,9 +5,9 @@ sites, especially learning guides. Out of the box you get a polished theme
 (five mdBook color themes, tuned for contrast) and a set of widgets:
 Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
 compares, self-checks, a progress map, a pace planner, an animated layer
-explorer, a numbered code walkthrough, and themed, zoomable Mermaid
-diagrams. Everything is driven by markup in your Markdown pages, so
-**writing a book never requires touching JavaScript**.
+explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
+and a three-way diff view. Everything is driven by markup in your
+Markdown pages, so **writing a book never requires touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -22,7 +22,7 @@ guide.
   - [Level tabs](#level-tabs) · [Self-check](#self-check-mark-as-known) · [Mark done](#mark-this-chapter-done)
   - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
-  - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram)
+  - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -70,6 +70,7 @@ theme/
   pace-chooser.js  layer-explorer.js
   code-walk.js            annotated code walkthrough
   mermaid-diagram.js       themed, zoomable Mermaid diagrams (lazy-loads mermaid from a CDN)
+  diff-view.js            Before / Diff / After view of one patch
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -330,6 +331,28 @@ flowchart LR
 ```
 ````
 
+### Diff view
+
+`.diff-view[data-diff-view]` around one fenced ` ```diff ` block (blank
+lines!). Three tabs: **Before**, **Diff**, **After**. Paste raw
+`git diff` output directly — `diff --git`/`index `/`--- `/`+++ `/`@@`
+lines are recognized and dropped from every view. Optional
+`data-labels="Before|Diff|After"`, `data-default="before|diff|after"`
+(default `diff`). Use **code compare** instead for two complete,
+independently-written blocks; diff view is for a single small patch.
+
+````html
+<div class="diff-view" data-diff-view>
+
+```diff
+ unchanged line
+-old line
++new line
+```
+
+</div>
+````
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -341,6 +364,7 @@ flowchart LR
 | Layer explorer | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move between layers |
 | Focus on a code-walk badge | <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> move between notes, digit keys jump to one |
 | Focus on a Mermaid diagram | <kbd>+</kbd> <kbd>-</kbd> zoom, <kbd>0</kbd> reset, drag to pan, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+scroll to zoom |
+| Diff view tabs | <kbd>←</kbd> <kbd>→</kbd> switch Before/Diff/After |
 
 Level keys are ignored while typing or when focus is in a quiz or deck.
 
@@ -384,10 +408,11 @@ your pages). `book-config.js` and `celebrate.js` are shared and should
 stay. Without JavaScript every widget degrades to readable content: quiz
 options as a list, flashcards as front/back pairs, the progress map as a
 list of links, layers as labelled paragraphs, a code walkthrough as code
-followed by a numbered list, and a Mermaid diagram as its own source text
-inside a code block. `mermaid-diagram.js` additionally only fetches
-Mermaid from the CDN on pages that contain a diagram — pages without one
-never pay for it.
+followed by a numbered list, a Mermaid diagram as its own source text
+inside a code block, and a diff view as a plain ` ```diff ` block (still
+colored by highlight.js's built-in diff grammar, just not switchable).
+`mermaid-diagram.js` additionally only fetches Mermaid from the CDN on
+pages that contain a diagram — pages without one never pay for it.
 
 ## Authoring gotchas
 

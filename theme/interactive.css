@@ -1,7 +1,7 @@
 /* ==========================================================================
    Interactive widgets: quiz, flashcards, code-compare, progress map,
    pace chooser timeline, layer explorer diagram, code walkthrough, mermaid
-   diagrams, celebrations.
+   diagrams, diff view, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -30,13 +30,13 @@
 }
 
 /* Shared button look for widget controls */
-.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn {
+.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
 .fc-ready:focus-visible, .fc-ready button:focus-visible, .cc-tab:focus-visible,
 .layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
-.cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible {
+.cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -638,3 +638,27 @@
 @media (prefers-reduced-motion: reduce) {
   .mmd-stage, .cw-note { transition: none; animation: none; }
 }
+
+/* ==========================================================================
+   Diff view
+   ========================================================================== */
+.diff-view.dv-ready { margin: 1.2em 0; }
+.diff-view.dv-ready pre { margin: 0 !important; border-top-left-radius: 0 !important; }
+.dv-tabs { display: flex; gap: 0.3em; margin-bottom: -1px; position: relative; z-index: 1; padding-left: 0.4em; }
+.dv-tab {
+  font-family: var(--ia-mono); font-size: 0.8em; font-weight: 600; color: var(--ia-muted);
+  padding: 0.35em 0.9em; border: 1px solid var(--ia-border); border-bottom: none;
+  border-radius: 8px 8px 0 0; background: transparent; transition: color 0.15s;
+}
+.dv-tab[aria-selected="true"] { background: var(--ia-surface); color: var(--fg, inherit); }
+.dv-tab.dv-diff[aria-selected="true"] { box-shadow: inset 0 3px 0 var(--ia-accent-2); }
+.dv-tab.dv-before[aria-selected="true"] { box-shadow: inset 0 3px 0 var(--ia-danger); }
+.dv-tab.dv-after[aria-selected="true"] { box-shadow: inset 0 3px 0 var(--ia-ok); }
+.diff-view.dv-ready pre > code { display: block; }
+.dv-line { display: block; }
+.dv-mark { display: inline-block; width: 1.3em; text-align: center; user-select: none; opacity: 0.8; }
+.dv-add { background: color-mix(in srgb, var(--ia-ok) 14%, transparent); }
+.dv-add .dv-mark { color: var(--ia-ok); font-weight: 700; }
+.dv-del { background: color-mix(in srgb, var(--ia-danger) 12%, transparent); }
+.dv-del .dv-mark { color: var(--ia-danger); font-weight: 700; }
+.dv-context.dv-dim { opacity: 0.6; }

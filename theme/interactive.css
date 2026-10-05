@@ -1,7 +1,8 @@
 /* ==========================================================================
    Interactive widgets: quiz, flashcards, code-compare, progress map,
-   pace chooser timeline, layer explorer diagram, code walkthrough, mermaid
-   diagrams, diff view, compatibility matrix, celebrations.
+   pace chooser week-by-week timeline, layer explorer diagram, code
+   walkthrough, mermaid diagrams, diff view, compatibility matrix, history
+   timeline, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -30,14 +31,14 @@
 }
 
 /* Shared button look for widget controls */
-.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab {
+.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
 .fc-ready:focus-visible, .fc-ready button:focus-visible, .cc-tab:focus-visible,
 .layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
 .cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible,
-.cm-cell.cm-has-note:focus-visible {
+.cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -703,3 +704,43 @@
 .cm-card-body { line-height: 1.55; }
 .cm-card-status { display: block; font-size: 0.78em; color: var(--ia-muted); margin: 0.1em 0 0.3em; }
 .cm-card-body p { margin: 0; }
+
+/* ==========================================================================
+   Timeline
+   ========================================================================== */
+.timeline.tl-ready { margin: 1.2em 0; }
+.tl-head { font-weight: 800; font-size: 1.02em; margin-bottom: 0.7em; }
+.tl-jump { display: flex; justify-content: space-between; margin-bottom: 0.6em; }
+.tl-jump-btn {
+  border: 1.5px solid var(--ia-border); border-radius: 999px; padding: 0.3em 0.85em; font-size: 0.8em;
+  font-weight: 600; background: transparent; color: inherit; transition: border-color 0.15s, color 0.15s;
+}
+.tl-jump-btn:hover { border-color: var(--ia-accent-2); color: var(--ia-accent-2); }
+.tl-line { list-style: none; margin: 0; padding: 0; position: relative; }
+.tl-stop { position: relative; padding: 0 0 1.4em 2.1em; }
+.tl-stop:last-child { padding-bottom: 0; }
+.tl-stop::before {
+  content: ""; position: absolute; left: 0.5em; top: 1.3em; bottom: -0.1em; width: 3px; margin-left: -1.5px;
+  background: linear-gradient(to bottom, var(--ia-accent), var(--ia-accent-2), var(--ia-ok)); opacity: 0.3;
+}
+.tl-stop:last-child::before { content: none; }
+.tl-dot {
+  position: absolute; left: 0; top: 0.15em; width: 18px; height: 18px; border-radius: 50%;
+  border: 3px solid var(--ia-accent); background: var(--bg, var(--ia-surface)); padding: 0;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.tl-dot:hover { transform: scale(1.15); }
+.tl-dot-active {
+  background: var(--ia-accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ia-accent) 25%, transparent), 0 0 14px var(--ia-accent);
+}
+.tl-entry { transition: opacity 0.2s; }
+.tl-stop-active .tl-entry { opacity: 1; }
+.tl-label { font-family: var(--ia-mono); font-weight: 700; font-size: 0.85em; color: var(--ia-accent-2); margin-bottom: 0.2em; }
+.tl-stop-active .tl-label { color: var(--ia-accent); }
+.tl-body { line-height: 1.55; }
+.tl-body > :first-child { margin-top: 0; }
+.tl-body > :last-child { margin-bottom: 0; }
+.tl-body code { font-size: 0.85em; }
+@media (prefers-reduced-motion: reduce) {
+  .tl-dot, .tl-entry { transition: none; }
+}

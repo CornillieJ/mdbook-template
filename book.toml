@@ -40,4 +40,5 @@ additional-js = [
     "theme/mermaid-diagram.js",
     "theme/diff-view.js",
     "theme/compat-matrix.js",
+    "theme/timeline.js",
 ]

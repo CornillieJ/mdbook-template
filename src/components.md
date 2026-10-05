@@ -515,6 +515,37 @@ Recognized glyphs: `✅`/`✓` (full), `⚠️`/`🟡` (partial), `❌`/`✗` (n
 The first column and header row are never touched, and a cell with no
 recognized leading emoji is left exactly as written.
 
+## Timeline
+
+A plain Markdown list becomes a vertical line of dated stops. Every
+entry's text stays fully visible (nothing collapses); the interactivity
+is orientation — click or arrow-key a dot to highlight it and scroll it
+into view.
+
+<div class="timeline" data-timeline data-title="This template's history">
+
+- **2024-01** First working prototype: a single-file script, no tests.
+- **2024-06** Rewritten as a proper CLI with a `node --test` suite.
+- **2025-02** v1.0 released, with config file support.
+- **2025-11** Plugin system added; three community plugins so far.
+
+</div>
+
+```html
+<div class="timeline" data-timeline data-title="Project history">
+
+- **2024-01** First working prototype.
+- **2024-06** Rewritten as a proper CLI.
+
+</div>
+```
+
+Each item's leading `**bold**` text is the stop's label; the rest is its
+body, and can contain inline Markdown like `code` or links. `data-title`
+is optional. <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move
+between stops once one has focus; "Oldest"/"Latest" jump to either end —
+useful once the list is long.
+
 ## Mark this chapter done
 
 One per chapter, usually at the end of the drill level. On pages with

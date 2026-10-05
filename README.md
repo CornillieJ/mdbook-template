@@ -8,10 +8,11 @@ compares, self-checks, a progress map, a pace planner, an animated layer
 explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
 a three-way diff view, an emoji-driven compatibility matrix, a history
 timeline, a "copy as" picker for equivalent snippets, a branching
-"what would you do?" scenario, hover-term glossary definitions, and a
-collapsible reference tree. Everything is driven by markup in your
-Markdown pages, so **writing a book never requires touching
-JavaScript**.
+"what would you do?" scenario, hover-term glossary definitions, a
+collapsible reference tree, and a fill-in-the-blank snippet for commands
+that need real values before they're useful. Everything is driven by
+markup in your Markdown pages, so **writing a book never requires
+touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -26,7 +27,7 @@ guide.
   - [Level tabs](#level-tabs) · [Self-check](#self-check-mark-as-known) · [Mark done](#mark-this-chapter-done)
   - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
-  - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
+  - [Code walkthrough](#code-walkthrough) · [Fill-in-the-blank snippet](#fill-in-the-blank-snippet) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
   - [Compatibility matrix](#compatibility-matrix) · [Timeline](#timeline) · [Copy as](#copy-as)
   - [Branching scenario](#branching-scenario) · [Glossary term](#glossary-term) · [Reference tree](#reference-tree)
 - [Keyboard shortcuts](#keyboard-shortcuts)
@@ -83,6 +84,7 @@ theme/
   scenario.js             branching "what would you do?" decision tree
   glossary.js             hover-term definitions + same-page glossary index
   ref-tree.js             nested markdown list as a collapsible outline
+  fill-in.js              {{NAME}} tokens in a code block become real inputs
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -323,6 +325,27 @@ function clamp(value, min, max) { // (1)
 
 1. Guard clauses instead of nested `if`/`else`.
 2. Returns as soon as the lower bound is violated.
+
+</div>
+````
+
+### Fill-in-the-blank snippet
+
+`.fill-in[data-fill-in]` around a single fenced code block (blank
+lines!) containing `{{NAME}}` or `{{NAME:default}}` tokens. Each one
+becomes a real `<input>` embedded in the code; repeats of the same NAME
+stay in sync as the reader types. "Copy filled snippet" copies the
+current values — mdBook's own copy-code button only ever copies the
+static template, so this widget gets its own copy action.
+
+````html
+<div class="fill-in" data-fill-in>
+
+```bash
+curl https://api.example.com/v1/users \
+  -H "Authorization: Bearer {{API_KEY}}" \
+  -H "X-Region: {{REGION:us-east-1}}"
+```
 
 </div>
 ````
@@ -588,8 +611,10 @@ note text are already right there in the cells — a timeline as a plain
 bulleted list, a copy-as block as a plain sequence of equivalent fenced
 snippets, a branching scenario as plain prompts and choice lists just
 without the branching, a glossary term as plain italicized text
-(browsers already style `<dfn>` that way) with no popover, and a
-reference tree as a perfectly ordinary nested list. `mermaid-diagram.js`
+(browsers already style `<dfn>` that way) with no popover, a reference
+tree as a perfectly ordinary nested list, and a fill-in-the-blank
+snippet as code with `{{NAME}}` tokens still visible as plain text —
+legible as "fill this in yourself" even unstyled. `mermaid-diagram.js`
 additionally only fetches Mermaid from the CDN on pages that contain a
 diagram — pages without one never pay for it.
 

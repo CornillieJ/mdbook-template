@@ -6,8 +6,9 @@ self-checks, a progress map, a pace chooser, a layer explorer, an annotated
 code walkthrough, themed Mermaid diagrams, a three-way diff view, an
 emoji-driven compatibility matrix, a history timeline, a "copy as"
 picker, a branching "what would you do?" scenario, hover-term glossary
-definitions and a collapsible reference tree, all driven by markup in
-the Markdown pages. **Writing a book never requires editing JS.**
+definitions, a collapsible reference tree and a fill-in-the-blank
+snippet, all driven by markup in the Markdown pages. **Writing a book
+never requires editing JS.**
 
 ## Where things live
 
@@ -60,6 +61,7 @@ the Markdown pages. **Writing a book never requires editing JS.**
 - Branching scenario: `<div class="scenario" data-scenario data-start="slug">` + a FLAT list of `<div class="sc-node" data-node="slug">` (not nested): `<p class="sc-prompt">`, `<ul class="sc-choices"><li data-goto="slug">label</li></ul>`, optional `<p class="sc-result">`; a node with `data-end` has no choices (shows "Start over"), optional `data-good` toasts via `window.Book.toast`. Choices pick by click or letter keys (A, B, ...), breadcrumb trail is clickable to rewind.
 - Glossary term: `<dfn data-def="...">word</dfn>` inline, anywhere in prose, no wrapper. Hover/focus shows the definition in a popover; tap toggles on touch; only one open at a time. Optional `<div data-glossary-index></div>` anywhere on a page collects every `dfn` already on THAT page (no cross-page magic) into a sorted, deduplicated list.
 - Reference tree: `<div class="ref-tree" data-ref-tree>` + blank line + a nested Markdown list (`- item` with indented sub-lists) + blank line + `</div>`. Top level starts expanded, deeper levels start collapsed; optional `data-expanded` starts everything open. Arrow keys: Right expand/move into first child, Left collapse/move to parent, Up/Down between visible toggles. No JS: still a plain nested list.
+- Fill-in-the-blank snippet: `<div class="fill-in" data-fill-in>` + blank line + a single fenced code block containing `{{NAME}}` or `{{NAME:default}}` tokens + blank line + `</div>`. Each token becomes a real `<input>` embedded in the code; repeats of the same NAME stay in sync. "Copy filled snippet" copies the current values (mdBook's own copy button would only copy the static template).
 
 ## Authoring rules
 

@@ -45,4 +45,5 @@ additional-js = [
     "theme/scenario.js",
     "theme/glossary.js",
     "theme/ref-tree.js",
+    "theme/fill-in.js",
 ]

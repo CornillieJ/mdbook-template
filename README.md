@@ -306,8 +306,8 @@ text). `` `backticks` `` in those attributes render as code.
 
 `.code-walk[data-code-walk]` around a single fenced code block (blank
 lines!) plus a plain `<ol>` of explanations. Mark the line a note is
-about with a trailing `(N)` inside a comment — `//`, `#`, `--`, `;`, `%`,
-`/* */` and `<!-- -->` are all recognized, so it works across languages.
+about with a trailing `(N)` inside a comment (`//`, `#`, `--`, `;`, `%`,
+`/* */` and `<!-- -->` are all recognized, so it works across languages).
 N is 1-based and must match that note's position in the list. Each
 marker becomes a small clickable badge; clicking one (or pressing its
 digit key) opens that note in a card below the code. "Expand all" shows
@@ -336,7 +336,7 @@ function clamp(value, min, max) { // (1)
 lines!) containing `{{NAME}}` or `{{NAME:default}}` tokens. Each one
 becomes a real `<input>` embedded in the code; repeats of the same NAME
 stay in sync as the reader types. "Copy filled snippet" copies the
-current values — mdBook's own copy-code button only ever copies the
+current values. mdBook's own copy-code button only ever copies the
 static template, so this widget gets its own copy action.
 
 ````html
@@ -353,7 +353,7 @@ curl https://api.example.com/v1/users \
 
 ### Mermaid diagram
 
-A plain ` ```mermaid ` fenced code block — no wrapper markup at all, the
+A plain ` ```mermaid ` fenced code block, no wrapper markup at all. It's the
 same convention every other mermaid-aware tool uses. `mermaid-diagram.js`
 lazy-loads [Mermaid](https://mermaid.js.org/) from a CDN only on pages
 that actually contain one, themes it from the book's own `--ia-*`/`--bg`/
@@ -375,7 +375,7 @@ flowchart LR
 
 `.diff-view[data-diff-view]` around one fenced ` ```diff ` block (blank
 lines!). Three tabs: **Before**, **Diff**, **After**. Paste raw
-`git diff` output directly — `diff --git`/`index `/`--- `/`+++ `/`@@`
+`git diff` output directly: `diff --git`/`index `/`--- `/`+++ `/`@@`
 lines are recognized and dropped from every view. Optional
 `data-labels="Before|Diff|After"`, `data-default="before|diff|after"`
 (default `diff`). Use **code compare** instead for two complete,
@@ -397,7 +397,7 @@ independently-written blocks; diff view is for a single small patch.
 
 `.compat-matrix[data-compat-matrix]` around a plain Markdown table whose
 status cells start with an emoji you'd type anyway: `✅`/`✓` (full),
-`⚠️`/`🟡` (partial), `❌`/`✗` (none). No new markup — the raw table reads
+`⚠️`/`🟡` (partial), `❌`/`✗` (none). No new markup: the raw table reads
 correctly with no JS. Text after the emoji is an optional note; a cell
 with one becomes clickable, showing the note in a card below the table
 (same shared-detail-card pattern as the layer explorer and code
@@ -418,7 +418,7 @@ walkthrough). The first column and header row are never touched.
 `.timeline[data-timeline]` around a plain Markdown list (blank lines!).
 Each item's leading `**bold**` text is the stop's label; the rest is its
 body (inline Markdown like `code` or links works). Renders as a vertical
-line of dots — every entry's full text stays visible, nothing collapses.
+line of dots. Every entry's full text stays visible, nothing collapses.
 Optional `data-title`. "Oldest"/"Latest" buttons jump to either end.
 
 ```html
@@ -434,7 +434,7 @@ Optional `data-title`. "Oldest"/"Latest" buttons jump to either end.
 
 `.copy-as[data-copy-as]` around 2+ fenced blocks (blank lines!) that are
 equivalent ways of doing the same thing, shown one at a time via a row
-of pills — never side by side, since there's no "compare" value in
+of pills, never side by side, since there's no "compare" value in
 seeing the yarn command next to the pnpm command. `data-labels="A|B|C"`
 is **required** (pipe-separated): unlike code compare, labels can't be
 guessed from the language. Optional `data-default="2"` (1-based) picks
@@ -464,7 +464,7 @@ pnpm add mdbook-template
 ### Branching scenario
 
 `.scenario[data-scenario]` with `data-start="slug"`, around a **flat**
-list of `.sc-node[data-node="slug"]` divs (not nested — a new branch
+list of `.sc-node[data-node="slug"]` divs (not nested; a new branch
 never means re-indenting existing ones): `.sc-prompt`, `.sc-choices > li[data-goto="slug"]`,
 and an optional `.sc-result`. A node with `data-end` has no choices and
 shows "Start over" instead; add `data-good` to celebrate that ending
@@ -496,7 +496,7 @@ any earlier point.
 
 ### Glossary term
 
-`<dfn data-def="...">word</dfn>` dropped inline anywhere in prose — no
+`<dfn data-def="...">word</dfn>` dropped inline anywhere in prose, no
 wrapper `<div>`. Hover or focus shows the definition in a small popover
 anchored to the term; tapping toggles it on touch. Only one popover is
 open at a time; <kbd>Esc</kbd>, a click elsewhere, or losing focus closes
@@ -508,7 +508,7 @@ A cache entry is <dfn data-def="Calling it once or many times has the same effec
 
 Optionally drop `<div data-glossary-index></div>` anywhere on a page
 (typically a reference chapter) to collect every `dfn[data-def]` already
-used **on that page** — deduplicated and sorted alphabetically — into a
+used **on that page**, deduplicated and sorted alphabetically, into a
 compact definition list:
 
 ```html
@@ -524,8 +524,8 @@ widget here.
 `.ref-tree[data-ref-tree]` around a nested Markdown list (blank lines!).
 Every item with a nested sub-list gets a toggle; leaf items are plain
 text. The top level starts expanded, everything deeper starts collapsed
-— optional `data-expanded` on the container starts every branch open
-instead. "Expand all"/"Collapse all" buttons sit above the tree.
+(optional `data-expanded` on the container starts every branch open
+instead). "Expand all"/"Collapse all" buttons sit above the tree.
 
 ```html
 <div class="ref-tree" data-ref-tree>
@@ -601,23 +601,24 @@ persistence. Widgets announce changes with `book:level-changed` and
 
 Remove its line from `additional-js` in `book.toml` (and its markup from
 your pages). `book-config.js` and `celebrate.js` are shared and should
-stay. Without JavaScript every widget degrades to readable content: quiz
-options as a list, flashcards as front/back pairs, the progress map as a
-list of links, layers as labelled paragraphs, a code walkthrough as code
-followed by a numbered list, a Mermaid diagram as its own source text
-inside a code block, a diff view as a plain ` ```diff ` block (still
-colored by highlight.js's built-in diff grammar, just not switchable),
-a compatibility matrix as its own plain Markdown table — the emoji and
-note text are already right there in the cells — a timeline as a plain
-bulleted list, a copy-as block as a plain sequence of equivalent fenced
-snippets, a branching scenario as plain prompts and choice lists just
-without the branching, a glossary term as plain italicized text
-(browsers already style `<dfn>` that way) with no popover, a reference
-tree as a perfectly ordinary nested list, and a fill-in-the-blank
-snippet as code with `{{NAME}}` tokens still visible as plain text —
-legible as "fill this in yourself" even unstyled. `mermaid-diagram.js`
-additionally only fetches Mermaid from the CDN on pages that contain a
-diagram — pages without one never pay for it.
+stay. Without JavaScript every widget degrades to readable content.
+Quiz options read as a list, flashcards as front/back pairs, the
+progress map as a list of links, layers as labelled paragraphs, and a
+code walkthrough as code followed by a numbered list. A Mermaid diagram
+falls back to its own source text inside a code block. A diff view
+falls back to a plain ` ```diff ` block, still colored by highlight.js's
+built-in diff grammar, just not switchable. A compatibility matrix is
+still a plain Markdown table, with the emoji and note text already
+right there in the cells. A timeline reads as a plain bulleted list, a
+copy-as block as a plain sequence of equivalent fenced snippets, and a
+branching scenario as plain prompts and choice lists, just without the
+branching. A glossary term reads as plain italicized text (browsers
+already style `<dfn>` that way) with no popover. A reference tree is a
+perfectly ordinary nested list, and a fill-in-the-blank snippet is code
+with `{{NAME}}` tokens still visible as plain text, legible as "fill
+this in yourself" even unstyled. `mermaid-diagram.js` also only fetches
+Mermaid from the CDN on pages that contain a diagram; pages without one
+never pay for it.
 
 ## Authoring gotchas
 

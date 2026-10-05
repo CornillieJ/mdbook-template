@@ -412,7 +412,7 @@ function clamp(value, min, max) { // (1)
 ````
 
 Numbers are 1-based and must match a note's position in the list below
-the code — write them in whatever order reads best. "Expand all" shows
+the code. Write them in whatever order reads best. "Expand all" shows
 every note stacked at once, handy for printing or a linear read.
 Without JavaScript the page still reads fine: code, then a plain
 numbered list of notes underneath it.
@@ -421,8 +421,8 @@ numbered list of notes underneath it.
 
 A fenced code block with `{{NAME}}` tokens, each one turned into a real
 input embedded right in the code. Repeats of the same name stay in sync
-as you type. "Copy filled snippet" copies what's actually in the fields
-— mdBook's own copy-code button would only ever copy the static
+as you type. "Copy filled snippet" copies what's actually in the fields.
+mdBook's own copy-code button would only ever copy the static
 template, so this widget gets its own.
 
 <div class="fill-in" data-fill-in>
@@ -451,12 +451,12 @@ curl https://api.example.com/v1/users \
 `{{NAME}}` starts empty with the name itself as a placeholder. Good for
 `curl` commands, `.env` files, and any config snippet that needs real
 values dropped in before it's actually runnable. Without JavaScript the
-`{{NAME}}` tokens stay visible as plain text in the code block — still
+`{{NAME}}` tokens stay visible as plain text in the code block, still
 legible as "fill this in yourself."
 
 ## Mermaid diagram
 
-A plain ` ```mermaid ` fenced block — no wrapper `<div>`, the same
+A plain ` ```mermaid ` fenced block, no wrapper `<div>`. It's the same
 convention every mermaid-aware tool already uses. It's themed to match
 whichever of the book's five color themes the reader has picked, and
 re-renders the instant they switch themes.
@@ -483,13 +483,13 @@ Drag to pan, use the toolbar's `−`/`+`/reset, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>
 focus. The `</>` button reveals the raw diagram text to copy. A typo in
 the diagram shows a themed error card instead of Mermaid's default
 output. Mermaid itself loads from a CDN, and only on pages that actually
-have a diagram — most pages pay nothing for it.
+have a diagram, so most pages pay nothing for it.
 
 ## Diff view
 
 One fenced ` ```diff ` block, switchable between three views: **Diff**
 (colored +/− lines), **Before** (the file as it was), **After** (the
-file as it is now). Paste raw `git diff` output straight in — the
+file as it is now). Paste raw `git diff` output straight in: the
 `diff --git`/`index`/`---`/`+++`/`@@` boilerplate lines are recognized
 and dropped from every view.
 
@@ -527,7 +527,7 @@ small patch.
 ## Compatibility matrix
 
 An ordinary Markdown table whose status cells start with an emoji you'd
-type anyway: ✅ full support, ⚠️ partial, ❌ none. No new markup — the
+type anyway: ✅ full support, ⚠️ partial, ❌ none. No new markup: the
 raw table reads correctly with no JS at all. Text after the emoji is an
 optional note; cells that have one become clickable, showing the note
 below the table.
@@ -560,7 +560,7 @@ recognized leading emoji is left exactly as written.
 
 A plain Markdown list becomes a vertical line of dated stops. Every
 entry's text stays fully visible (nothing collapses); the interactivity
-is orientation — click or arrow-key a dot to highlight it and scroll it
+is orientation: click or arrow-key a dot to highlight it and scroll it
 into view.
 
 <div class="timeline" data-timeline data-title="This template's history">
@@ -584,14 +584,14 @@ into view.
 Each item's leading `**bold**` text is the stop's label; the rest is its
 body, and can contain inline Markdown like `code` or links. `data-title`
 is optional. <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move
-between stops once one has focus; "Oldest"/"Latest" jump to either end —
+between stops once one has focus; "Oldest"/"Latest" jump to either end,
 useful once the list is long.
 
 ## Reference tree
 
-A nested Markdown list becomes a collapsible outline — for a file tree,
-the shape of an API response, a permissions hierarchy, anything that's
-"what contains what." The top level starts open, deeper levels start
+A nested Markdown list becomes a collapsible outline, good for a file
+tree, the shape of an API response, a permissions hierarchy, anything
+that's "what contains what." The top level starts open, deeper levels start
 collapsed, so a big tree doesn't dump everything on the reader at once.
 
 <div class="ref-tree" data-ref-tree>
@@ -629,7 +629,7 @@ perfectly normal nested list.
 ## Copy as
 
 Two or more fenced blocks that are **equivalent forms of the same
-thing** — pick one, see just that one. Unlike code compare, these never
+thing**: pick one, see just that one. Unlike code compare, these never
 show side by side: showing the yarn command next to the pnpm command
 helps no one, the reader just wants the one for their tool. The pick is
 remembered for the whole book (not just this block), so choosing "yarn"
@@ -670,7 +670,7 @@ pnpm add mdbook-template
 ````
 
 `data-labels` is required (pipe-separated): unlike code compare, labels
-can't be guessed from the language — three bash blocks would all just
+can't be guessed from the language: three bash blocks would all just
 say "Shell". <kbd>←</kbd> <kbd>→</kbd> move between pills once one has
 focus. Optional `data-default="2"` (1-based) picks the starting pane
 when the reader has no stored preference yet; defaults to the first.
@@ -694,7 +694,7 @@ exercises.
 </div>
 
 <div class="sc-node" data-node="check-deploys">
-<p class="sc-result">Good instinct — a deploy 20 minutes ago added a synchronous call to a slow endpoint.</p>
+<p class="sc-result">Good instinct. A deploy 20 minutes ago added a synchronous call to a slow endpoint.</p>
 <p class="sc-prompt">Roll back, or hotfix forward?</p>
 <ul class="sc-choices">
 <li data-goto="end-rollback">Roll back</li>
@@ -738,7 +738,7 @@ exercises.
 </div>
 ```
 
-Nodes are a **flat list**, not nested — each one is addressed by
+Nodes are a **flat list**, not nested. Each one is addressed by
 `data-node` and reached through a choice's `data-goto`, so adding a new
 branch never means re-indenting existing ones. A node with `data-end`
 has no `.sc-choices` and shows "Start over" instead; add `data-good` to
@@ -749,7 +749,7 @@ lists, just without the branching.
 
 ## Glossary term
 
-Mark a word inline with `<dfn data-def="...">`, anywhere in prose — no
+Mark a word inline with `<dfn data-def="...">`, anywhere in prose, no
 wrapper div needed. Hover or focus shows the definition in a small
 popover; tap toggles it on touch. Only one popover is open at a time,
 and <kbd>Esc</kbd> or a click elsewhere closes it.

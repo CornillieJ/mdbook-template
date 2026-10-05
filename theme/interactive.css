@@ -2,7 +2,7 @@
    Interactive widgets: quiz, flashcards, code-compare, progress map,
    pace chooser week-by-week timeline, layer explorer diagram, code
    walkthrough, mermaid diagrams, diff view, compatibility matrix, history
-   timeline, copy as, celebrations.
+   timeline, copy as, branching scenario, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -31,14 +31,16 @@
 }
 
 /* Shared button look for widget controls */
-.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn, .ca-pill {
+.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn, .ca-pill,
+.sc-choice, .sc-crumb, .sc-restart {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
 .fc-ready:focus-visible, .fc-ready button:focus-visible, .cc-tab:focus-visible,
 .layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
 .cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible,
-.cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible, .ca-pill:focus-visible {
+.cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible, .ca-pill:focus-visible,
+.sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -758,3 +760,37 @@
 }
 .ca-pill.ca-pill-active { background: var(--ia-surface); color: var(--fg, inherit); box-shadow: inset 0 3px 0 var(--ia-accent-2); }
 .copy-as.ca-ready pre:not(.ca-active) { display: none; }
+
+/* ==========================================================================
+   Branching scenario
+   ========================================================================== */
+.scenario.sc-ready { margin: 1.2em 0; border: 1px solid var(--ia-border); border-radius: var(--ia-radius); background: var(--ia-surface); padding: 1em 1.1em; }
+.sc-crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3em; margin-bottom: 0.8em; font-size: 0.82em; color: var(--ia-muted); }
+.sc-crumb { background: none; border: none; padding: 0.1em 0.2em; border-radius: 4px; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 0.2em; }
+.sc-crumb:hover { color: var(--ia-accent-2); }
+.sc-crumb-sep { opacity: 0.5; }
+.sc-prompt { font-weight: 700; margin: 0 0 0.7em; }
+.sc-result { margin: 0 0 0.7em; line-height: 1.55; }
+.sc-result:last-child { margin-bottom: 0; }
+.sc-choices { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5em; }
+.sc-choice {
+  display: flex; align-items: center; gap: 0.7em; width: 100%; text-align: left;
+  border: 1.5px solid var(--ia-border); border-radius: var(--ia-radius); background: var(--bg, transparent);
+  padding: 0.6em 0.9em; transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+.sc-choice:hover { border-color: var(--ia-accent-2); }
+.sc-choice:active { transform: scale(0.99); }
+.sc-letter {
+  flex: none; width: 1.6em; height: 1.6em; display: grid; place-items: center; border-radius: 6px;
+  font-family: var(--ia-mono); font-weight: 700; font-size: 0.8em; background: var(--ia-surface-2); color: var(--ia-muted);
+}
+.sc-choice:hover .sc-letter { background: var(--ia-accent-2); color: var(--ia-accent-contrast); }
+.sc-restart {
+  border: none; border-radius: 999px; padding: 0.55em 1.3em; font-weight: 700;
+  background: var(--ia-accent); color: var(--ia-accent-contrast) !important;
+}
+.sc-stage { animation: ia-reveal 0.25s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .sc-stage { animation: none; }
+  .sc-choice, .sc-crumb { transition: none; }
+}

@@ -42,4 +42,5 @@ additional-js = [
     "theme/compat-matrix.js",
     "theme/timeline.js",
     "theme/copy-as.js",
+    "theme/scenario.js",
 ]

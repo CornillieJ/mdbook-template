@@ -49,6 +49,7 @@ picks up automatically.
 | compare support/status at a glance | compatibility matrix |
 | show how something evolved over time | timeline |
 | show equivalent ways to do the same thing | copy as |
+| practice a decision, not just read about it | branching scenario |
 | plan their time | pace chooser (once, on a "how to use this book" page) |
 | see how far they are | progress map (landing page) |
 

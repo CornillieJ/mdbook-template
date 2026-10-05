@@ -7,9 +7,10 @@ Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
 compares, self-checks, a progress map, a pace planner, an animated layer
 explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
 a three-way diff view, an emoji-driven compatibility matrix, a history
-timeline, and a "copy as" picker for equivalent snippets. Everything is
-driven by markup in your Markdown pages, so **writing a book never
-requires touching JavaScript**.
+timeline, a "copy as" picker for equivalent snippets, and a branching
+"what would you do?" scenario. Everything is driven by markup in your
+Markdown pages, so **writing a book never requires touching
+JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -26,6 +27,7 @@ guide.
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
   - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
   - [Compatibility matrix](#compatibility-matrix) · [Timeline](#timeline) · [Copy as](#copy-as)
+  - [Branching scenario](#branching-scenario)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -77,6 +79,7 @@ theme/
   compat-matrix.js        emoji-driven compatibility matrix
   timeline.js             a markdown list as a vertical dated timeline
   copy-as.js              pick one of several equivalent snippets; pick remembered site-wide
+  scenario.js             branching "what would you do?" decision tree
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -427,6 +430,39 @@ pnpm add mdbook-template
 </div>
 ````
 
+### Branching scenario
+
+`.scenario[data-scenario]` with `data-start="slug"`, around a **flat**
+list of `.sc-node[data-node="slug"]` divs (not nested — a new branch
+never means re-indenting existing ones): `.sc-prompt`, `.sc-choices > li[data-goto="slug"]`,
+and an optional `.sc-result`. A node with `data-end` has no choices and
+shows "Start over" instead; add `data-good` to celebrate that ending
+with a toast (via the same `window.Book.toast` helper the rest of the
+theme uses). A clickable breadcrumb trail tracks the path and rewinds to
+any earlier point.
+
+```html
+<div class="scenario" data-scenario data-start="first">
+
+<div class="sc-node" data-node="first">
+<p class="sc-prompt">The question?</p>
+<ul class="sc-choices">
+<li data-goto="good-end">Choice A</li>
+<li data-goto="bad-end">Choice B</li>
+</ul>
+</div>
+
+<div class="sc-node" data-node="good-end" data-end data-good>
+<p class="sc-result">What happened, and why it was the right call.</p>
+</div>
+
+<div class="sc-node" data-node="bad-end" data-end>
+<p class="sc-result">What happened instead.</p>
+</div>
+
+</div>
+```
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -441,6 +477,7 @@ pnpm add mdbook-template
 | Diff view tabs | <kbd>←</kbd> <kbd>→</kbd> switch Before/Diff/After |
 | Focus on a timeline dot | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move between stops |
 | Copy as pills | <kbd>←</kbd> <kbd>→</kbd> switch the visible snippet |
+| Focus inside a scenario | <kbd>A</kbd>–<kbd>H</kbd> pick a choice |
 
 Level keys are ignored while typing or when focus is in a quiz or deck.
 
@@ -491,10 +528,11 @@ inside a code block, a diff view as a plain ` ```diff ` block (still
 colored by highlight.js's built-in diff grammar, just not switchable),
 a compatibility matrix as its own plain Markdown table — the emoji and
 note text are already right there in the cells — a timeline as a plain
-bulleted list, and a copy-as block as a plain sequence of equivalent
-fenced snippets. `mermaid-diagram.js` additionally only fetches Mermaid
-from the CDN on pages that contain a diagram — pages without one never
-pay for it.
+bulleted list, a copy-as block as a plain sequence of equivalent fenced
+snippets, and a branching scenario as plain prompts and choice lists,
+just without the branching. `mermaid-diagram.js` additionally only
+fetches Mermaid from the CDN on pages that contain a diagram — pages
+without one never pay for it.
 
 ## Authoring gotchas
 

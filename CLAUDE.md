@@ -4,9 +4,10 @@ This repo is a template for interactive mdBook sites (learning guides
 especially). Readers get level tabs, quizzes, flashcards, code compares,
 self-checks, a progress map, a pace chooser, a layer explorer, an annotated
 code walkthrough, themed Mermaid diagrams, a three-way diff view, an
-emoji-driven compatibility matrix, a history timeline and a "copy as"
-picker, all driven by markup in the Markdown pages. **Writing a book
-never requires editing JS.**
+emoji-driven compatibility matrix, a history timeline, a "copy as"
+picker and a branching "what would you do?" scenario, all driven by
+markup in the Markdown pages. **Writing a book never requires editing
+JS.**
 
 ## Where things live
 
@@ -56,6 +57,7 @@ never requires editing JS.**
 - Compatibility matrix: `<div class="compat-matrix" data-compat-matrix>` + blank line + a plain Markdown table whose cells start with `✅`/`✓` (full), `⚠️`/`🟡` (partial) or `❌`/`✗` (none) + blank line + `</div>`. Text after the emoji is a note; cells with one become clickable, showing the note in a shared card below the table. First column and header untouched.
 - Timeline: `<div class="timeline" data-timeline>` + blank line + a Markdown list `- **label** body` + blank line + `</div>`; optional `data-title`. Every entry stays visible (no collapsing); click/arrow-key a dot to highlight + scroll to it.
 - Copy as: `<div class="copy-as" data-copy-as data-labels="A|B|C">` + blank line + 2+ fenced blocks (one shown at a time, never side by side) + blank line + `</div>`. `data-labels` is required (not guessed from language). Optional `data-default="2"` (1-based). The reader's pick is remembered site-wide (`<prefix>:copyas-pref`), so it carries over to every copy-as block on every page.
+- Branching scenario: `<div class="scenario" data-scenario data-start="slug">` + a FLAT list of `<div class="sc-node" data-node="slug">` (not nested): `<p class="sc-prompt">`, `<ul class="sc-choices"><li data-goto="slug">label</li></ul>`, optional `<p class="sc-result">`; a node with `data-end` has no choices (shows "Start over"), optional `data-good` toasts via `window.Book.toast`. Choices pick by click or letter keys (A, B, ...), breadcrumb trail is clickable to rewind.
 
 ## Authoring rules
 

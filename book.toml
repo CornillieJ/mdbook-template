@@ -39,4 +39,5 @@ additional-js = [
     "theme/code-walk.js",
     "theme/mermaid-diagram.js",
     "theme/diff-view.js",
+    "theme/scenario.js",
 ]

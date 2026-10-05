@@ -3,9 +3,9 @@
 This repo is a template for interactive mdBook sites (learning guides
 especially). Readers get level tabs, quizzes, flashcards, code compares,
 self-checks, a progress map, a pace chooser, a layer explorer, an annotated
-code walkthrough, themed Mermaid diagrams and a three-way diff view, all
-driven by markup in the Markdown pages. **Writing a book never requires
-editing JS.**
+code walkthrough, themed Mermaid diagrams, a three-way diff view, and a
+branching "what would you do?" scenario, all driven by markup in the
+Markdown pages. **Writing a book never requires editing JS.**
 
 ## Where things live
 
@@ -52,6 +52,7 @@ editing JS.**
 - Code walkthrough: `<div class="code-walk" data-code-walk>` + blank line + a fenced code block with `// (1)`-style trailing markers (`//`, `#`, `--`, `;`, `%`, `/* */`, `<!-- -->` all recognized) + blank line + a plain `<ol>` of explanations, numbered to match + blank line + `</div>`. No JS: still reads as code + a numbered list.
 - Mermaid diagram: a plain ` ```mermaid ` fenced code block, no wrapper div. Lazy-loads mermaid from a CDN only on pages that use it; themed from `--ia-*`/`--bg`/`--fg`, re-renders on theme switch. Zoom buttons, ctrl/cmd+wheel, drag-to-pan, keyboard `+`/`-`/`0`, and a "view source" toggle.
 - Diff view: `<div class="diff-view" data-diff-view>` + blank line + a fenced ` ```diff ` block (raw `git diff` output works — `diff --git`/`index`/`---`/`+++`/`@@` lines are stripped) + blank line + `</div>`. Three tabs: Before/Diff/After. Optional `data-labels="Before|Diff|After"`, `data-default="before|diff|after"` (default `diff`).
+- Branching scenario: `<div class="scenario" data-scenario data-start="slug">` + a FLAT list of `<div class="sc-node" data-node="slug">` (not nested): `<p class="sc-prompt">`, `<ul class="sc-choices"><li data-goto="slug">label</li></ul>`, optional `<p class="sc-result">`; a node with `data-end` has no choices (shows "Start over"), optional `data-good` toasts via `window.Book.toast`. Choices pick by click or letter keys (A, B, ...), breadcrumb trail is clickable to rewind.
 
 ## Authoring rules
 

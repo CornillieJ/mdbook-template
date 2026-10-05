@@ -6,8 +6,9 @@ sites, especially learning guides. Out of the box you get a polished theme
 Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
 compares, self-checks, a progress map, a pace planner, an animated layer
 explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
-and a three-way diff view. Everything is driven by markup in your
-Markdown pages, so **writing a book never requires touching JavaScript**.
+a three-way diff view, and a branching "what would you do?" scenario.
+Everything is driven by markup in your Markdown pages, so **writing a
+book never requires touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -23,6 +24,7 @@ guide.
   - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
   - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
+  - [Branching scenario](#branching-scenario)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -71,6 +73,7 @@ theme/
   code-walk.js            annotated code walkthrough
   mermaid-diagram.js       themed, zoomable Mermaid diagrams (lazy-loads mermaid from a CDN)
   diff-view.js            Before / Diff / After view of one patch
+  scenario.js             branching "what would you do?" decision tree
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -353,6 +356,39 @@ independently-written blocks; diff view is for a single small patch.
 </div>
 ````
 
+### Branching scenario
+
+`.scenario[data-scenario]` with `data-start="slug"`, around a **flat**
+list of `.sc-node[data-node="slug"]` divs (not nested — a new branch
+never means re-indenting existing ones): `.sc-prompt`, `.sc-choices > li[data-goto="slug"]`,
+and an optional `.sc-result`. A node with `data-end` has no choices and
+shows "Start over" instead; add `data-good` to celebrate that ending
+with a toast (via the same `window.Book.toast` helper the rest of the
+theme uses). A clickable breadcrumb trail tracks the path and rewinds to
+any earlier point.
+
+```html
+<div class="scenario" data-scenario data-start="first">
+
+<div class="sc-node" data-node="first">
+<p class="sc-prompt">The question?</p>
+<ul class="sc-choices">
+<li data-goto="good-end">Choice A</li>
+<li data-goto="bad-end">Choice B</li>
+</ul>
+</div>
+
+<div class="sc-node" data-node="good-end" data-end data-good>
+<p class="sc-result">What happened, and why it was the right call.</p>
+</div>
+
+<div class="sc-node" data-node="bad-end" data-end>
+<p class="sc-result">What happened instead.</p>
+</div>
+
+</div>
+```
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -365,6 +401,7 @@ independently-written blocks; diff view is for a single small patch.
 | Focus on a code-walk badge | <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> move between notes, digit keys jump to one |
 | Focus on a Mermaid diagram | <kbd>+</kbd> <kbd>-</kbd> zoom, <kbd>0</kbd> reset, drag to pan, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+scroll to zoom |
 | Diff view tabs | <kbd>←</kbd> <kbd>→</kbd> switch Before/Diff/After |
+| Focus inside a scenario | <kbd>A</kbd>–<kbd>H</kbd> pick a choice |
 
 Level keys are ignored while typing or when focus is in a quiz or deck.
 
@@ -409,10 +446,12 @@ stay. Without JavaScript every widget degrades to readable content: quiz
 options as a list, flashcards as front/back pairs, the progress map as a
 list of links, layers as labelled paragraphs, a code walkthrough as code
 followed by a numbered list, a Mermaid diagram as its own source text
-inside a code block, and a diff view as a plain ` ```diff ` block (still
-colored by highlight.js's built-in diff grammar, just not switchable).
-`mermaid-diagram.js` additionally only fetches Mermaid from the CDN on
-pages that contain a diagram — pages without one never pay for it.
+inside a code block, a diff view as a plain ` ```diff ` block (still
+colored by highlight.js's built-in diff grammar, just not switchable),
+and a branching scenario as plain prompts and choice lists, just without
+the branching. `mermaid-diagram.js` additionally only fetches Mermaid
+from the CDN on pages that contain a diagram — pages without one never
+pay for it.
 
 ## Authoring gotchas
 

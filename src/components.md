@@ -483,6 +483,78 @@ Reach for **code compare** instead when you want two complete,
 independently-written blocks side by side; diff view is for a single
 small patch.
 
+## Branching scenario
+
+A "what would you do?" prompt with 2-4 choices; each one reveals a result
+and either the next prompt or an ending. A breadcrumb trail tracks the
+path, and any earlier crumb is clickable to jump back and try a
+different branch. Good for incident-response runbooks and "debug this"
+exercises.
+
+<div class="scenario" data-scenario data-start="alert-fires">
+
+<div class="sc-node" data-node="alert-fires">
+<p class="sc-prompt">A paging alert fires at 2am for high latency on checkout. What do you check first?</p>
+<ul class="sc-choices">
+<li data-goto="check-deploys">Recent deploys</li>
+<li data-goto="check-db">Database load</li>
+</ul>
+</div>
+
+<div class="sc-node" data-node="check-deploys">
+<p class="sc-result">Good instinct — a deploy 20 minutes ago added a synchronous call to a slow endpoint.</p>
+<p class="sc-prompt">Roll back, or hotfix forward?</p>
+<ul class="sc-choices">
+<li data-goto="end-rollback">Roll back</li>
+<li data-goto="end-hotfix">Hotfix forward</li>
+</ul>
+</div>
+
+<div class="sc-node" data-node="check-db" data-end>
+<p class="sc-result">Database load is normal. You've burned 10 minutes; the real cause is still live.</p>
+</div>
+
+<div class="sc-node" data-node="end-rollback" data-end data-good>
+<p class="sc-result">Rollback resolves it in 2 minutes. Low risk, fast recovery under uncertainty.</p>
+</div>
+
+<div class="sc-node" data-node="end-hotfix" data-end>
+<p class="sc-result">The hotfix takes 25 minutes to write, review and ship while the alert stays open.</p>
+</div>
+
+</div>
+
+```html
+<div class="scenario" data-scenario data-start="first">
+
+<div class="sc-node" data-node="first">
+<p class="sc-prompt">The question?</p>
+<ul class="sc-choices">
+<li data-goto="good-end">Choice A</li>
+<li data-goto="bad-end">Choice B</li>
+</ul>
+</div>
+
+<div class="sc-node" data-node="good-end" data-end data-good>
+<p class="sc-result">What happened, and why it was the right call.</p>
+</div>
+
+<div class="sc-node" data-node="bad-end" data-end>
+<p class="sc-result">What happened instead.</p>
+</div>
+
+</div>
+```
+
+Nodes are a **flat list**, not nested — each one is addressed by
+`data-node` and reached through a choice's `data-goto`, so adding a new
+branch never means re-indenting existing ones. A node with `data-end`
+has no `.sc-choices` and shows "Start over" instead; add `data-good` to
+celebrate that ending with a toast. Choices are picked by click or the
+same letter keys (<kbd>A</kbd>, <kbd>B</kbd>, ...) the quiz widget uses.
+Without JavaScript the nodes still read as plain prompts and choice
+lists, just without the branching.
+
 ## Mark this chapter done
 
 One per chapter, usually at the end of the drill level. On pages with

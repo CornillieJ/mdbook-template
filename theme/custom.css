@@ -68,7 +68,6 @@
 
   /* Internal helpers (derived; normally left alone) */
   --bk-tabs-bg: color-mix(in srgb, var(--bg) 88%, transparent);
-  --bk-grad: linear-gradient(90deg, var(--brand-1), var(--brand-2) 55%, var(--brand-3));
   --bk-ease: cubic-bezier(.2, .8, .2, 1);
 }
 
@@ -186,10 +185,8 @@ body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 .content main > h1:first-of-type::after {
   content: "";
   position: absolute; left: 0; bottom: 0;
-  width: 88px; height: 5px; border-radius: 999px;
-  background: var(--bk-grad);
-  transform-origin: left center;
-  animation: bk-grow .9s var(--bk-ease) .1s both;
+  width: 48px; height: 2px;
+  background: var(--bk-accent);
 }
 /* mdBook's "»" target marker would push the title around. */
 .content main > h1:first-of-type:target::before { display: none; }
@@ -330,7 +327,7 @@ hr {
   display: inline-block; vertical-align: middle;
   width: 10px; height: 10px; margin-right: 10px; margin-top: -3px;
   border-radius: 3px;
-  background: var(--bk-grad);
+  background: var(--bk-accent);
   transform: rotate(45deg);
 }
 
@@ -745,7 +742,6 @@ html.bk-print .level-tabs, html.bk-print [data-mark-done] { display: none; }
 /* ---------- Motion ------------------------------------------------------ */
 @keyframes bk-fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes bk-fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes bk-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes bk-pop { 0% { transform: scale(1); } 40% { transform: scale(1.14); } 100% { transform: scale(1); } }
 @keyframes bk-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 

@@ -143,9 +143,10 @@
 .quiz-opt.is-wrong .quiz-letter { background: var(--ia-danger); color: #fff; }
 .quiz-opt.is-wrong .quiz-opt-text { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ia-danger) 60%, transparent); }
 .quiz.solved .quiz-opt:not(.is-correct):not(.is-wrong) { opacity: 0.55; }
-.quiz-why, .quiz-whynot {
-  margin: 0.3em 0 0 2.3em; padding: 0 0 0 0.7em; font-size: 0.86em; line-height: 1.4;
-  color: var(--ia-muted); border-left: 2px solid var(--ia-border);
+.quiz-why, .quiz-whynot { display: none; }
+.quiz-options > li.wy-shown .quiz-why, .quiz-options > li.wy-shown .quiz-whynot {
+  display: block; margin: 0.3em 0 0 2.3em; padding: 0 0 0 0.7em; font-size: 0.86em; line-height: 1.4;
+  color: var(--ia-muted); border-left: 2px solid var(--ia-border); animation: ia-reveal 0.3s ease-out;
 }
 .quiz-why::before, .quiz-whynot::before { font-weight: 700; margin-right: 0.35em; }
 .quiz-why::before { content: "Why:"; color: var(--ia-ok); }

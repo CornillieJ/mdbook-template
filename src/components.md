@@ -483,6 +483,38 @@ Reach for **code compare** instead when you want two complete,
 independently-written blocks side by side; diff view is for a single
 small patch.
 
+## Compatibility matrix
+
+An ordinary Markdown table whose status cells start with an emoji you'd
+type anyway: ✅ full support, ⚠️ partial, ❌ none. No new markup — the
+raw table reads correctly with no JS at all. Text after the emoji is an
+optional note; cells that have one become clickable, showing the note
+below the table.
+
+<div class="compat-matrix" data-compat-matrix>
+
+| Feature | Chrome | Safari | Firefox |
+|---|---|---|---|
+| WebGPU | ✅ | ⚠️ Behind a flag until v18 | ❌ |
+| Container queries | ✅ | ✅ | ✅ Since Firefox 110 |
+| View transitions | ✅ Since Chrome 111 | ❌ | ❌ Tracked in bug 1823896 |
+
+</div>
+
+```html
+<div class="compat-matrix" data-compat-matrix>
+
+| Feature | Chrome | Safari | Firefox |
+|---|---|---|---|
+| WebGPU | ✅ | ⚠️ Behind a flag until v18 | ❌ |
+
+</div>
+```
+
+Recognized glyphs: `✅`/`✓` (full), `⚠️`/`🟡` (partial), `❌`/`✗` (none).
+The first column and header row are never touched, and a cell with no
+recognized leading emoji is left exactly as written.
+
 ## Mark this chapter done
 
 One per chapter, usually at the end of the drill level. On pages with

@@ -1,7 +1,7 @@
 /* ==========================================================================
    Interactive widgets: quiz, flashcards, code-compare, progress map,
    pace chooser timeline, layer explorer diagram, code walkthrough, mermaid
-   diagrams, diff view, celebrations.
+   diagrams, diff view, compatibility matrix, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -36,7 +36,8 @@
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
 .fc-ready:focus-visible, .fc-ready button:focus-visible, .cc-tab:focus-visible,
 .layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
-.cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible {
+.cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible,
+.cm-cell.cm-has-note:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -662,3 +663,43 @@
 .dv-del { background: color-mix(in srgb, var(--ia-danger) 12%, transparent); }
 .dv-del .dv-mark { color: var(--ia-danger); font-weight: 700; }
 .dv-context.dv-dim { opacity: 0.6; }
+
+/* ==========================================================================
+   Compatibility matrix
+   ========================================================================== */
+.compat-matrix.cm-ready { margin: 1.2em 0; }
+.cm-cell { text-align: center !important; }
+.cm-dot {
+  display: inline-block; width: 0.85em; height: 0.85em; border-radius: 999px;
+  background: var(--cm-c, var(--ia-muted));
+}
+.cm-full { --cm-c: var(--ia-ok); }
+.cm-partial { --cm-c: var(--ia-warn); }
+.cm-none { --cm-c: var(--ia-danger); }
+.cm-cell.cm-has-note {
+  cursor: pointer; border-radius: 6px; transition: background 0.15s;
+}
+.cm-cell.cm-has-note:hover { background: var(--ia-surface-2); }
+.cm-cell.cm-has-note::after {
+  content: ''; display: inline-block; width: 0.3em; height: 0.3em; margin-left: 0.3em;
+  border-right: 1.5px solid var(--ia-muted); border-bottom: 1.5px solid var(--ia-muted);
+  transform: rotate(45deg) translateY(-1px); opacity: 0.6;
+}
+.cm-cell-active { background: var(--ia-surface-2); }
+.cm-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.cm-panel { margin-top: 0.7em; }
+.cm-card {
+  display: flex; gap: 0.7em; align-items: flex-start; border: 1px solid var(--ia-border);
+  border-left: 4px solid var(--cm-c, var(--ia-accent)); border-radius: var(--ia-radius);
+  background: var(--ia-surface); padding: 0.75em 0.9em; animation: ia-reveal 0.25s ease-out;
+}
+.cm-card-dot {
+  flex: none; margin-top: 0.35em; width: 0.85em; height: 0.85em; border-radius: 999px;
+  background: var(--cm-c, var(--ia-muted));
+}
+.cm-card.cm-full { --cm-c: var(--ia-ok); }
+.cm-card.cm-partial { --cm-c: var(--ia-warn); }
+.cm-card.cm-none { --cm-c: var(--ia-danger); }
+.cm-card-body { line-height: 1.55; }
+.cm-card-status { display: block; font-size: 0.78em; color: var(--ia-muted); margin: 0.1em 0 0.3em; }
+.cm-card-body p { margin: 0; }

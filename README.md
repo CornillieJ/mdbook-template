@@ -6,8 +6,9 @@ sites, especially learning guides. Out of the box you get a polished theme
 Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
 compares, self-checks, a progress map, a pace planner, an animated layer
 explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
-and a three-way diff view. Everything is driven by markup in your
-Markdown pages, so **writing a book never requires touching JavaScript**.
+a three-way diff view, and an emoji-driven compatibility matrix.
+Everything is driven by markup in your Markdown pages, so **writing a
+book never requires touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -23,6 +24,7 @@ guide.
   - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
   - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
+  - [Compatibility matrix](#compatibility-matrix)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -71,6 +73,7 @@ theme/
   code-walk.js            annotated code walkthrough
   mermaid-diagram.js       themed, zoomable Mermaid diagrams (lazy-loads mermaid from a CDN)
   diff-view.js            Before / Diff / After view of one patch
+  compat-matrix.js        emoji-driven compatibility matrix
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -353,6 +356,26 @@ independently-written blocks; diff view is for a single small patch.
 </div>
 ````
 
+### Compatibility matrix
+
+`.compat-matrix[data-compat-matrix]` around a plain Markdown table whose
+status cells start with an emoji you'd type anyway: `✅`/`✓` (full),
+`⚠️`/`🟡` (partial), `❌`/`✗` (none). No new markup — the raw table reads
+correctly with no JS. Text after the emoji is an optional note; a cell
+with one becomes clickable, showing the note in a card below the table
+(same shared-detail-card pattern as the layer explorer and code
+walkthrough). The first column and header row are never touched.
+
+```html
+<div class="compat-matrix" data-compat-matrix>
+
+| Feature | Chrome | Safari | Firefox |
+|---|---|---|---|
+| WebGPU | ✅ | ⚠️ Behind a flag until v18 | ❌ |
+
+</div>
+```
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -409,8 +432,10 @@ stay. Without JavaScript every widget degrades to readable content: quiz
 options as a list, flashcards as front/back pairs, the progress map as a
 list of links, layers as labelled paragraphs, a code walkthrough as code
 followed by a numbered list, a Mermaid diagram as its own source text
-inside a code block, and a diff view as a plain ` ```diff ` block (still
-colored by highlight.js's built-in diff grammar, just not switchable).
+inside a code block, a diff view as a plain ` ```diff ` block (still
+colored by highlight.js's built-in diff grammar, just not switchable),
+and a compatibility matrix as its own plain Markdown table — the emoji
+and note text are already right there in the cells.
 `mermaid-diagram.js` additionally only fetches Mermaid from the CDN on
 pages that contain a diagram — pages without one never pay for it.
 

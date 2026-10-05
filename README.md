@@ -192,12 +192,16 @@ with `data-correct`) and an optional `.quiz-explain` shown once solved. A
 scoreboard appears above the page's first quiz; a perfect score gets
 confetti.
 
+An `li` can also hold a `.quiz-why` (correct option) or `.quiz-whynot`
+(wrong option) paragraph. Unlike `.quiz-explain`, these show up right away,
+not gated behind solving the question.
+
 ```html
 <div class="quiz" data-quiz>
 <p class="quiz-q">The question?</p>
 <ol class="quiz-options">
-<li>Wrong</li>
-<li data-correct>Right</li>
+<li>Wrong<p class="quiz-whynot">Why not.</p></li>
+<li data-correct>Right<p class="quiz-why">Why.</p></li>
 </ol>
 <p class="quiz-explain">Why.</p>
 </div>

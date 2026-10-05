@@ -172,16 +172,19 @@ Leave out the `<div class="mark">` line for a plain reveal card.
 ## Quiz
 
 Multiple choice with instant feedback. Wrong picks can be retried, the
-explanation appears once solved, and a scoreboard above the first quiz
+`quiz-explain` appears once solved, and a scoreboard above the first quiz
 on the page tracks first-try answers (a perfect score earns confetti).
 With focus inside a quiz, letter keys <kbd>A</kbd>–<kbd>D</kbd> pick.
+
+An option can also carry its own `quiz-why`/`quiz-whynot` paragraph —
+unlike `quiz-explain`, those render immediately, no solving required.
 
 <div class="quiz" data-quiz>
 <p class="quiz-q">Which header value keeps a response out of every cache?</p>
 <ol class="quiz-options">
-<li><code>no-cache</code></li>
-<li data-correct><code>no-store</code></li>
-<li><code>private</code></li>
+<li><code>no-cache</code><p class="quiz-whynot">Still stores the response and revalidates it, it just won't serve it without asking first.</p></li>
+<li data-correct><code>no-store</code><p class="quiz-why">The only value that refuses to persist the response anywhere.</p></li>
+<li><code>private</code><p class="quiz-whynot">Only rules out <em>shared</em> caches; the browser's own cache still stores it.</p></li>
 </ol>
 <p class="quiz-explain"><code>no-cache</code> still stores (and revalidates); <code>private</code> only rules out shared caches.</p>
 </div>
@@ -190,8 +193,8 @@ With focus inside a quiz, letter keys <kbd>A</kbd>–<kbd>D</kbd> pick.
 <div class="quiz" data-quiz>
 <p class="quiz-q">The question?</p>
 <ol class="quiz-options">
-<li>A wrong answer</li>
-<li data-correct>The right answer</li>
+<li>A wrong answer<p class="quiz-whynot">Why this one's wrong.</p></li>
+<li data-correct>The right answer<p class="quiz-why">Why this one's right.</p></li>
 <li>Another wrong answer</li>
 </ol>
 <p class="quiz-explain">Why the right answer is right.</p>

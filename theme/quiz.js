@@ -2,14 +2,15 @@
 //   <div class="quiz" data-quiz>
 //   <p class="quiz-q">Question?</p>
 //   <ol class="quiz-options">
-//   <li>Wrong</li>
-//   <li data-correct>Right</li>
+//   <li>Wrong<p class="quiz-whynot">Why this is wrong.</p></li>
+//   <li data-correct>Right<p class="quiz-why">Why this is right.</p></li>
 //   </ol>
 //   <p class="quiz-explain">Why (shown once solved).</p>
 //   </div>
 // Options become buttons with instant feedback, a wrong pick can be retried,
 // and a per-page scoreboard counts first-try answers. Letter keys (A, B, ...)
-// pick an option while focus is inside a quiz.
+// pick an option while focus is inside a quiz. An option's .quiz-why/.quiz-whynot
+// is pulled out of the button and stays visible immediately, unlike .quiz-explain.
 (function () {
   var LETTERS = 'ABCDEFGH';
 
@@ -168,12 +169,19 @@
         letter.className = 'quiz-letter';
         letter.setAttribute('aria-hidden', 'true');
         letter.textContent = LETTERS[oi] || oi + 1;
+        var why = li.querySelector('.quiz-why');
+        var whyNot = li.querySelector('.quiz-whynot');
+        if (why) why.parentNode.removeChild(why);
+        if (whyNot) whyNot.parentNode.removeChild(whyNot);
+
         var body = document.createElement('span');
         body.className = 'quiz-opt-text';
         while (li.firstChild) body.appendChild(li.firstChild);
         btn.appendChild(letter);
         btn.appendChild(body);
         li.appendChild(btn);
+        if (why) li.appendChild(why);
+        if (whyNot) li.appendChild(whyNot);
         btn.addEventListener('click', function () { pick(btn, correct); });
       });
 

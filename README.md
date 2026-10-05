@@ -198,8 +198,9 @@ scoreboard appears above the page's first quiz; a perfect score gets
 confetti.
 
 An `li` can also hold a `.quiz-why` (correct option) or `.quiz-whynot`
-(wrong option) paragraph. Unlike `.quiz-explain`, these show up right away,
-not gated behind solving the question.
+(wrong option) paragraph. Each stays hidden until that specific option is
+picked (right or wrong); once the question is solved, every option's
+reasoning becomes visible, not just the one(s) picked.
 
 ```html
 <div class="quiz" data-quiz>

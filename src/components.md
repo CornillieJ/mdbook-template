@@ -176,8 +176,9 @@ Multiple choice with instant feedback. Wrong picks can be retried, the
 on the page tracks first-try answers (a perfect score earns confetti).
 With focus inside a quiz, letter keys <kbd>A</kbd>–<kbd>D</kbd> pick.
 
-An option can also carry its own `quiz-why`/`quiz-whynot` paragraph —
-unlike `quiz-explain`, those render immediately, no solving required.
+An option can also carry its own `quiz-why`/`quiz-whynot` paragraph. Each
+stays hidden until that option is picked; solving the question reveals
+every option's reasoning at once, not just the one(s) picked.
 
 <div class="quiz" data-quiz>
 <p class="quiz-q">Which header value keeps a response out of every cache?</p>

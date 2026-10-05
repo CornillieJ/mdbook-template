@@ -10,7 +10,8 @@
 // Options become buttons with instant feedback, a wrong pick can be retried,
 // and a per-page scoreboard counts first-try answers. Letter keys (A, B, ...)
 // pick an option while focus is inside a quiz. An option's .quiz-why/.quiz-whynot
-// is pulled out of the button and stays visible immediately, unlike .quiz-explain.
+// is pulled out of the button; it stays hidden until that option is picked, and
+// once the question is solved every option's reasoning becomes visible.
 (function () {
   var LETTERS = 'ABCDEFGH';
 
@@ -127,6 +128,7 @@
         b.classList.remove('is-correct', 'is-wrong', 'reveal');
         b.removeAttribute('aria-pressed');
       });
+      q.querySelectorAll('.quiz-options > li').forEach(function (li) { li.classList.remove('wy-shown'); });
       var fb = q.querySelector('.quiz-feedback');
       if (fb) fb.textContent = '';
     }
@@ -189,11 +191,13 @@
         if (q.classList.contains('solved')) return;
         results[qi] = nextResult(results[qi], correct);
         btn.setAttribute('aria-pressed', 'true');
+        btn.closest('li').classList.add('wy-shown');
         if (correct) {
           btn.classList.add('is-correct');
           q.classList.remove('missed');
           q.classList.add('solved');
           q.querySelectorAll('.quiz-opt').forEach(function (b) { b.disabled = true; });
+          q.querySelectorAll('.quiz-options > li').forEach(function (li) { li.classList.add('wy-shown'); });
           feedback.textContent = results[qi] === 'first' ? pickOne(['Correct!', 'Spot on.', 'Yes! Nailed it.', 'Exactly right.']) : 'Got it on the retry.';
           feedback.setAttribute('data-kind', 'ok');
         } else {

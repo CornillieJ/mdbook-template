@@ -1,34 +1,38 @@
 # Writing Guide
 
-How to write pages that actually teach, and the handful of rules that
-keep mdBook and the widgets happy.
+This template is for three kinds of book: a tutorial that teaches something
+end to end, a piece of project documentation, or a reference/knowledge base
+people search rather than read start to finish. The widgets below work for
+all three. The rules are what keep mdBook and the widgets happy. The word
+list at the end is there because AI drafting tools have a house style of
+their own, and it's not yours.
 
 ## Start a chapter
 
 1. Copy `templates/chapter.md` (outside `src/`) to `src/your-chapter.md`.
 2. Add it to `src/SUMMARY.md`, under the right part heading.
 3. Add it to the progress map on the welcome page, if it is a chapter
-   readers should finish.
+   readers should finish (skip this for reference pages nobody "finishes").
 4. Run `mdbook serve --open` and write with the page open beside you.
 
 ## Structure a chapter
 
-The template's shape is **Overview, Deep Understanding, Drilling**,
-because readers arrive with different amounts of time and knowledge.
+Pick the shape that matches what the page is for. Don't force a tutorial
+skeleton onto a reference page.
 
 <div class="table-wrap">
 
-| Level | Purpose | Put here |
-|---|---|---|
-| **Overview** | Why it matters and what "done" looks like, in 5 minutes | A short intro, an "After this chapter you can" list, one code compare or diagram |
-| **Deep Understanding** | The mental model | `###` sections, tables, callouts for gotchas, a layer explorer |
-| **Drilling** | Prove it | A checklist of hands-on tasks, a quiz, flashcards, self-checks, the mark-done button |
+| This page is... | Structure it as |
+|---|---|
+| A tutorial or walkthrough | Levels: **Overview** (what and why, 5 minutes), **Deep Understanding** (the mental model), **Drilling** (hands-on tasks, a quiz, the mark-done button) |
+| Project documentation (how a system works, how to deploy it) | Flat `##`/`###` sections in the order someone would actually need them: setup first, then the thing itself, then the edge cases |
+| Reference material (API list, config options, a glossary) | One long page, `##` per entry, alphabetical or grouped by feature — "On this page" picks the headings up automatically |
 
 </div>
 
-Not every page needs levels. Reference pages (a cheat sheet, a glossary)
-read better as one long page with `##` headings, which "On this page"
-picks up automatically.
+Levels are a tool for *pacing*, not a requirement. A reference page that
+forces every entry through Overview/Deep/Drill just slows people down who
+already know what they're looking for.
 
 ## Choosing a widget
 
@@ -50,6 +54,9 @@ picks up automatically.
 | show how something evolved over time | timeline |
 | show equivalent ways to do the same thing | copy as |
 | practice a decision, not just read about it | branching scenario |
+| look up a term without losing their place | glossary term |
+| get a command they can actually paste and run | fill-in-the-blank snippet |
+| see what contains what | reference tree |
 | plan their time | pace chooser (once, on a "how to use this book" page) |
 | see how far they are | progress map (landing page) |
 
@@ -109,16 +116,61 @@ Without the blank lines, everything inside is passed through as raw HTML.
   `[text](page.md)` over `<a href="page.html">`.
 - **One mark-done button per chapter**, and give each chapter a unique
   file name: the file name is the key its progress is stored under.
+  Reference pages don't need one at all.
 - **Don't rename published chapters** lightly: readers' progress is keyed
   by file name and would reset.
 
-## Voice and pacing
+## Voice
+
+Write like you're explaining it to the person sitting next to you, not
+presenting it to a room.
+
+<div class="table-wrap">
+
+| Instead of | Write |
+|---|---|
+| "This section will delve into the configuration options." | "Here are the config options." |
+| "Leverage the API to seamlessly integrate your workflow." | "Call the API from your own code." |
+| "It's important to note that the cache can become stale." | "The cache can go stale." |
+| "Whether you're a beginner or an experienced developer, this guide has you covered." | Pick one reader. Write for them. |
+| "Simply click the button to get started." | "Click the button." (if it were simple, you wouldn't need the sentence) |
+| "This powerful feature unlocks a world of possibilities." | Say what it actually does. |
+| "In today's fast-paced development landscape..." | Delete. Start with the first real sentence. |
+
+</div>
+
+A few words and patterns to cut on sight, because they're the fingerprint
+of AI-generated prose, not because they're "wrong" in some abstract sense:
+
+<div class="table-wrap">
+
+| Avoid | Why |
+|---|---|
+| delve, dive in, unpack, navigate, landscape, realm, tapestry | Filler that sounds like it means something |
+| leverage, utilize, harness, foster, streamline | Use the plain verb: use, make, help, simplify |
+| robust, seamless, powerful, cutting-edge, game-changing | Adjectives standing in for a missing fact |
+| unlock, supercharge, elevate, take X to the next level | Marketing voice, not documentation voice |
+| "It's not just X, it's Y" | Just say what it is |
+| "Whether you're X or Y, ..." | Pick a reader and address them |
+| "In today's world / fast-paced landscape" | Says nothing; delete the sentence |
+| Em dashes doing the work a period should | Use a period. Or a comma. Rarely a dash. |
+| A rhetorical question as a section opener ("But what does this really mean?") | Just answer it |
+| Stacking "Additionally," "Furthermore," "Moreover" as paragraph openers | Cut the connector, keep the sentence |
+
+</div>
+
+None of this means writing has to be dry. It means every sentence should
+survive the test "would I actually say this out loud to a colleague?" If
+not, cut it or say it plainer.
 
 - Lead with *why*, then *what*, then *how*.
 - One idea per section. If a section needs two callouts, it is two sections.
 - Show before you tell: a code compare or a table often replaces three
   paragraphs.
-- End every chapter with something to *do*.
+- Name the actual thing. "The config file" beats "this configuration",
+  "the `deploy` button" beats "this feature."
+- Tutorials end with something to *do*. Reference pages end with a link
+  to whatever's related, not a call to action.
 
 ## Check your work
 

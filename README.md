@@ -8,9 +8,10 @@ compares, self-checks, a progress map, a pace planner, an animated layer
 explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
 a three-way diff view, an emoji-driven compatibility matrix, a history
 timeline, a "copy as" picker for equivalent snippets, a branching
-"what would you do?" scenario, and hover-term glossary definitions.
-Everything is driven by markup in your Markdown pages, so **writing a
-book never requires touching JavaScript**.
+"what would you do?" scenario, hover-term glossary definitions, and a
+collapsible reference tree. Everything is driven by markup in your
+Markdown pages, so **writing a book never requires touching
+JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -27,7 +28,7 @@ guide.
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
   - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
   - [Compatibility matrix](#compatibility-matrix) · [Timeline](#timeline) · [Copy as](#copy-as)
-  - [Branching scenario](#branching-scenario) · [Glossary term](#glossary-term)
+  - [Branching scenario](#branching-scenario) · [Glossary term](#glossary-term) · [Reference tree](#reference-tree)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -81,6 +82,7 @@ theme/
   copy-as.js              pick one of several equivalent snippets; pick remembered site-wide
   scenario.js             branching "what would you do?" decision tree
   glossary.js             hover-term definitions + same-page glossary index
+  ref-tree.js             nested markdown list as a collapsible outline
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -493,6 +495,30 @@ No cross-page magic and no build step: it only reads the current page's
 `dfn` elements, the same "no dependencies" philosophy as every other
 widget here.
 
+### Reference tree
+
+`.ref-tree[data-ref-tree]` around a nested Markdown list (blank lines!).
+Every item with a nested sub-list gets a toggle; leaf items are plain
+text. The top level starts expanded, everything deeper starts collapsed
+— optional `data-expanded` on the container starts every branch open
+instead. "Expand all"/"Collapse all" buttons sit above the tree.
+
+```html
+<div class="ref-tree" data-ref-tree>
+
+- `src/`
+  - `components/`
+    - `Button.tsx`
+- `package.json`
+
+</div>
+```
+
+<kbd>→</kbd> expands (or moves into the first child if already open),
+<kbd>←</kbd> collapses (or moves to the parent if already closed),
+<kbd>↑</kbd> <kbd>↓</kbd> move between whatever toggles are currently
+visible.
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -508,6 +534,7 @@ widget here.
 | Focus on a timeline dot | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move between stops |
 | Copy as pills | <kbd>←</kbd> <kbd>→</kbd> switch the visible snippet |
 | Focus inside a scenario | <kbd>A</kbd>–<kbd>H</kbd> pick a choice |
+| Focus on a reference-tree toggle | <kbd>←</kbd> <kbd>→</kbd> collapse/expand, <kbd>↑</kbd> <kbd>↓</kbd> move between visible toggles |
 
 Level keys are ignored while typing or when focus is in a quiz or deck.
 
@@ -560,10 +587,11 @@ a compatibility matrix as its own plain Markdown table — the emoji and
 note text are already right there in the cells — a timeline as a plain
 bulleted list, a copy-as block as a plain sequence of equivalent fenced
 snippets, a branching scenario as plain prompts and choice lists just
-without the branching, and a glossary term as plain italicized text
-(browsers already style `<dfn>` that way) with no popover.
-`mermaid-diagram.js` additionally only fetches Mermaid from the CDN on
-pages that contain a diagram — pages without one never pay for it.
+without the branching, a glossary term as plain italicized text
+(browsers already style `<dfn>` that way) with no popover, and a
+reference tree as a perfectly ordinary nested list. `mermaid-diagram.js`
+additionally only fetches Mermaid from the CDN on pages that contain a
+diagram — pages without one never pay for it.
 
 ## Authoring gotchas
 

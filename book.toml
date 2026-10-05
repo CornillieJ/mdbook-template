@@ -44,4 +44,5 @@ additional-js = [
     "theme/copy-as.js",
     "theme/scenario.js",
     "theme/glossary.js",
+    "theme/ref-tree.js",
 ]

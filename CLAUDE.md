@@ -5,9 +5,9 @@ especially). Readers get level tabs, quizzes, flashcards, code compares,
 self-checks, a progress map, a pace chooser, a layer explorer, an annotated
 code walkthrough, themed Mermaid diagrams, a three-way diff view, an
 emoji-driven compatibility matrix, a history timeline, a "copy as"
-picker, a branching "what would you do?" scenario and hover-term
-glossary definitions, all driven by markup in the Markdown pages.
-**Writing a book never requires editing JS.**
+picker, a branching "what would you do?" scenario, hover-term glossary
+definitions and a collapsible reference tree, all driven by markup in
+the Markdown pages. **Writing a book never requires editing JS.**
 
 ## Where things live
 
@@ -59,6 +59,7 @@ glossary definitions, all driven by markup in the Markdown pages.
 - Copy as: `<div class="copy-as" data-copy-as data-labels="A|B|C">` + blank line + 2+ fenced blocks (one shown at a time, never side by side) + blank line + `</div>`. `data-labels` is required (not guessed from language). Optional `data-default="2"` (1-based). The reader's pick is remembered site-wide (`<prefix>:copyas-pref`), so it carries over to every copy-as block on every page.
 - Branching scenario: `<div class="scenario" data-scenario data-start="slug">` + a FLAT list of `<div class="sc-node" data-node="slug">` (not nested): `<p class="sc-prompt">`, `<ul class="sc-choices"><li data-goto="slug">label</li></ul>`, optional `<p class="sc-result">`; a node with `data-end` has no choices (shows "Start over"), optional `data-good` toasts via `window.Book.toast`. Choices pick by click or letter keys (A, B, ...), breadcrumb trail is clickable to rewind.
 - Glossary term: `<dfn data-def="...">word</dfn>` inline, anywhere in prose, no wrapper. Hover/focus shows the definition in a popover; tap toggles on touch; only one open at a time. Optional `<div data-glossary-index></div>` anywhere on a page collects every `dfn` already on THAT page (no cross-page magic) into a sorted, deduplicated list.
+- Reference tree: `<div class="ref-tree" data-ref-tree>` + blank line + a nested Markdown list (`- item` with indented sub-lists) + blank line + `</div>`. Top level starts expanded, deeper levels start collapsed; optional `data-expanded` starts everything open. Arrow keys: Right expand/move into first child, Left collapse/move to parent, Up/Down between visible toggles. No JS: still a plain nested list.
 
 ## Authoring rules
 

@@ -2,7 +2,8 @@
    Interactive widgets: quiz, flashcards, code-compare, progress map,
    pace chooser week-by-week timeline, layer explorer diagram, code
    walkthrough, mermaid diagrams, diff view, compatibility matrix, history
-   timeline, copy as, branching scenario, glossary terms, celebrations.
+   timeline, copy as, branching scenario, glossary terms, reference tree,
+   celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -32,7 +33,7 @@
 
 /* Shared button look for widget controls */
 .quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn, .ca-pill,
-.sc-choice, .sc-crumb, .sc-restart, .gl-term {
+.sc-choice, .sc-crumb, .sc-restart, .gl-term, .rt-toggle, .rt-all {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
@@ -40,7 +41,8 @@
 .layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
 .cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible,
 .cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible, .ca-pill:focus-visible,
-.sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible, .gl-term:focus-visible {
+.sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible, .gl-term:focus-visible,
+.rt-toggle:focus-visible, .rt-all:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -823,4 +825,36 @@
 .gl-index dd { margin: 0.15em 0 0; color: var(--ia-muted); line-height: 1.5; }
 @media (prefers-reduced-motion: reduce) {
   .gl-popover { animation: none; }
+}
+
+/* ==========================================================================
+   Reference tree
+   ========================================================================== */
+.ref-tree.rt-ready { margin: 1.2em 0; }
+.rt-controls { display: flex; gap: 0.5em; margin-bottom: 0.7em; }
+.rt-all {
+  border: 1.5px solid var(--ia-border); border-radius: 999px; padding: 0.3em 0.85em; font-size: 0.82em;
+  font-weight: 600; background: transparent; color: inherit; transition: border-color 0.15s, color 0.15s;
+}
+.rt-all:hover { border-color: var(--ia-accent-2); color: var(--ia-accent-2); }
+.ref-tree.rt-ready ul, .ref-tree.rt-ready ol { list-style: none; margin: 0; padding: 0; }
+.ref-tree.rt-ready > ul, .ref-tree.rt-ready > ol { font-family: var(--ia-mono); font-size: 0.92em; }
+.ref-tree.rt-ready ul ul, .ref-tree.rt-ready ul ol, .ref-tree.rt-ready ol ul, .ref-tree.rt-ready ol ol {
+  margin-left: 0.95em; padding-left: 0.95em; border-left: 1.5px dashed var(--ia-border);
+}
+.ref-tree.rt-ready li { position: relative; padding: 0.18em 0; line-height: 1.5; }
+.rt-toggle {
+  display: inline-grid; place-items: center; width: 1.3em; height: 1.3em; margin-right: 0.3em;
+  border: none; border-radius: 4px; background: transparent; color: var(--ia-muted); vertical-align: -0.3em;
+}
+.rt-toggle:hover { background: var(--ia-surface-2); color: var(--ia-accent-2); }
+.rt-chevron {
+  display: inline-block; width: 0; height: 0; border-style: solid; border-width: 0.3em 0 0.3em 0.45em;
+  border-color: transparent transparent transparent currentColor; transition: transform 0.15s;
+}
+.rt-toggle[aria-expanded="true"] .rt-chevron { transform: rotate(90deg); }
+/* Leaf items (no .rt-toggle) line up with the text of their expandable siblings. */
+.ref-tree.rt-ready li:not(:has(> .rt-toggle)) { padding-left: 1.6em; }
+@media (prefers-reduced-motion: reduce) {
+  .rt-chevron { transition: none; }
 }

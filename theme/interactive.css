@@ -2,7 +2,7 @@
    Interactive widgets: quiz, flashcards, code-compare, progress map,
    pace chooser week-by-week timeline, layer explorer diagram, code
    walkthrough, mermaid diagrams, diff view, compatibility matrix, history
-   timeline, copy as, branching scenario, celebrations.
+   timeline, copy as, branching scenario, glossary terms, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -32,7 +32,7 @@
 
 /* Shared button look for widget controls */
 .quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn, .ca-pill,
-.sc-choice, .sc-crumb, .sc-restart {
+.sc-choice, .sc-crumb, .sc-restart, .gl-term {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
@@ -40,7 +40,7 @@
 .layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
 .cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible,
 .cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible, .ca-pill:focus-visible,
-.sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible {
+.sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible, .gl-term:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -800,4 +800,27 @@
 @media (prefers-reduced-motion: reduce) {
   .sc-stage { animation: none; }
   .sc-choice, .sc-crumb { transition: none; }
+}
+
+/* ==========================================================================
+   Glossary term
+   ========================================================================== */
+.gl-term {
+  text-decoration: underline dotted; text-decoration-color: var(--ia-accent-2);
+  text-underline-offset: 0.2em; text-decoration-thickness: 1.5px; border-radius: 3px;
+}
+.gl-term:hover, .gl-term[aria-expanded="true"] { color: var(--ia-accent-2); }
+.gl-popover {
+  position: absolute; z-index: 20; max-width: min(22em, calc(100vw - 2em));
+  border: 1px solid var(--ia-border); border-left: 4px solid var(--ia-accent-2); border-radius: var(--ia-radius);
+  background: var(--ia-surface); box-shadow: var(--ia-shadow); padding: 0.65em 0.85em;
+  font-size: 0.88em; line-height: 1.5; animation: ia-reveal 0.15s ease-out;
+}
+.gl-popover.gl-above { border-left: none; border-top: 4px solid var(--ia-accent-2); }
+.gl-index { margin: 0; display: grid; gap: 0.1em; }
+.gl-index dt { font-weight: 700; margin-top: 0.7em; }
+.gl-index dt:first-child { margin-top: 0; }
+.gl-index dd { margin: 0.15em 0 0; color: var(--ia-muted); line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) {
+  .gl-popover { animation: none; }
 }

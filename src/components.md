@@ -549,6 +549,45 @@ is optional. <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move
 between stops once one has focus; "Oldest"/"Latest" jump to either end —
 useful once the list is long.
 
+## Reference tree
+
+A nested Markdown list becomes a collapsible outline — for a file tree,
+the shape of an API response, a permissions hierarchy, anything that's
+"what contains what." The top level starts open, deeper levels start
+collapsed, so a big tree doesn't dump everything on the reader at once.
+
+<div class="ref-tree" data-ref-tree>
+
+- `src/`
+  - `components/`
+    - `Button.tsx`
+    - `Modal.tsx`
+  - `pages/`
+    - `index.tsx`
+- `package.json`
+- `README.md`
+
+</div>
+
+```html
+<div class="ref-tree" data-ref-tree>
+
+- `src/`
+  - `components/`
+    - `Button.tsx`
+- `package.json`
+
+</div>
+```
+
+<kbd>&rarr;</kbd> expands a branch (or moves into its first child if
+already open), <kbd>&larr;</kbd> collapses it (or moves to its parent if
+already closed), <kbd>&uarr;</kbd> <kbd>&darr;</kbd> move between
+whatever's currently visible. Leaf items (no children) are plain text,
+no toggle. Optional `data-expanded` on the container starts every branch
+open instead of just the top level. Without JavaScript it's still a
+perfectly normal nested list.
+
 ## Copy as
 
 Two or more fenced blocks that are **equivalent forms of the same

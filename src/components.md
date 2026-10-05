@@ -416,6 +416,43 @@ every note stacked at once, handy for printing or a linear read.
 Without JavaScript the page still reads fine: code, then a plain
 numbered list of notes underneath it.
 
+## Fill-in-the-blank snippet
+
+A fenced code block with `{{NAME}}` tokens, each one turned into a real
+input embedded right in the code. Repeats of the same name stay in sync
+as you type. "Copy filled snippet" copies what's actually in the fields
+— mdBook's own copy-code button would only ever copy the static
+template, so this widget gets its own.
+
+<div class="fill-in" data-fill-in>
+
+```bash
+curl https://api.example.com/v1/users \
+  -H "Authorization: Bearer {{API_KEY}}" \
+  -H "X-Region: {{REGION:us-east-1}}"
+```
+
+</div>
+
+````html
+<div class="fill-in" data-fill-in>
+
+```bash
+curl https://api.example.com/v1/users \
+  -H "Authorization: Bearer {{API_KEY}}" \
+  -H "X-Region: {{REGION:us-east-1}}"
+```
+
+</div>
+````
+
+`{{NAME:default text}}` seeds that field's starting value; plain
+`{{NAME}}` starts empty with the name itself as a placeholder. Good for
+`curl` commands, `.env` files, and any config snippet that needs real
+values dropped in before it's actually runnable. Without JavaScript the
+`{{NAME}}` tokens stay visible as plain text in the code block — still
+legible as "fill this in yourself."
+
 ## Mermaid diagram
 
 A plain ` ```mermaid ` fenced block — no wrapper `<div>`, the same

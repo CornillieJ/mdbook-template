@@ -2,7 +2,8 @@
    Interactive widgets: quiz, flashcards, code-compare, progress map,
    pace chooser week-by-week timeline, layer explorer diagram, code
    walkthrough, mermaid diagrams, diff view, compatibility matrix, history
-   timeline, copy as, branching scenario, celebrations.
+   timeline, copy as, branching scenario, fill-in-the-blank snippet,
+   celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -32,7 +33,7 @@
 
 /* Shared button look for widget controls */
 .quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn, .ca-pill,
-.sc-choice, .sc-crumb, .sc-restart {
+.sc-choice, .sc-crumb, .sc-restart, .fi-copy {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
@@ -40,7 +41,7 @@
 .layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
 .cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible,
 .cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible, .ca-pill:focus-visible,
-.sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible {
+.sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible, .fi-field:focus-visible, .fi-copy:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -801,3 +802,25 @@
   .sc-stage { animation: none; }
   .sc-choice, .sc-crumb { transition: none; }
 }
+
+/* ==========================================================================
+   Fill-in-the-blank snippet
+   ========================================================================== */
+.fill-in.fi-ready pre > code { line-height: 1.6; }
+.fi-field {
+  font-family: var(--ia-mono); font-size: 1em; color: var(--ia-accent-2);
+  background: color-mix(in srgb, var(--ia-accent-2) 10%, transparent);
+  border: none; border-bottom: 1.5px dashed var(--ia-accent-2);
+  border-radius: 3px; padding: 0 0.3em; margin: 0 0.1em;
+  min-width: 2em; transition: background 0.15s, border-color 0.15s;
+}
+.fi-field::placeholder { color: var(--ia-muted); opacity: 0.8; }
+.fi-field:hover { background: color-mix(in srgb, var(--ia-accent-2) 16%, transparent); }
+.fi-field:focus { background: color-mix(in srgb, var(--ia-accent-2) 20%, transparent); border-bottom-style: solid; }
+.fi-bar { margin-top: 0.7em; }
+.fi-copy {
+  border: 1.5px solid var(--ia-border); border-radius: 999px; padding: 0.4em 1em; font-size: 0.85em;
+  font-weight: 600; background: transparent; color: inherit; transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.fi-copy:hover { border-color: var(--ia-accent-2); color: var(--ia-accent-2); }
+.fi-copy.fi-copied { border-color: var(--ia-ok); color: var(--ia-ok); background: color-mix(in srgb, var(--ia-ok) 10%, transparent); }

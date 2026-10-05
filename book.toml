@@ -43,4 +43,5 @@ additional-js = [
     "theme/timeline.js",
     "theme/copy-as.js",
     "theme/scenario.js",
+    "theme/fill-in.js",
 ]

@@ -670,6 +670,34 @@ same letter keys (<kbd>A</kbd>, <kbd>B</kbd>, ...) the quiz widget uses.
 Without JavaScript the nodes still read as plain prompts and choice
 lists, just without the branching.
 
+## Glossary term
+
+Mark a word inline with `<dfn data-def="...">`, anywhere in prose — no
+wrapper div needed. Hover or focus shows the definition in a small
+popover; tap toggles it on touch. Only one popover is open at a time,
+and <kbd>Esc</kbd> or a click elsewhere closes it.
+
+A cache entry is **<dfn data-def="Calling it once or many times has the same effect on the server.">idempotent</dfn>** if repeating the request doesn't change the outcome — unlike, say, incrementing a counter, which is <dfn data-def="Each call changes the result: calling it twice is not the same as calling it once.">non-idempotent</dfn>. A <dfn data-def="A response saved so a later identical request can be answered without hitting the origin server again.">cache hit</dfn> skips all of that and just replies from the saved copy.
+
+```html
+A cache entry is <dfn data-def="Calling it once or many times has the same effect on the server.">idempotent</dfn> if repeating the request doesn't change the outcome.
+```
+
+Drop a `[data-glossary-index]` anywhere — typically a reference chapter
+— to collect every `dfn` term already used **on that page**, deduplicated
+and sorted:
+
+<div data-glossary-index></div>
+
+```html
+<div data-glossary-index></div>
+```
+
+No cross-page magic and no build step: it only ever reads the current
+page's `dfn` elements. Without JavaScript a `dfn` still reads fine —
+browsers already italicize it by default, it just won't pop up a
+definition on hover.
+
 ## Mark this chapter done
 
 One per chapter, usually at the end of the drill level. On pages with

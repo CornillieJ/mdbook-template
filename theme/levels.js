@@ -27,6 +27,34 @@
     }
     return null;
   }
+  // Pure: should a sidebar sub-heading for a level-gated section read as
+  // dimmed? True only when the heading belongs to a level and it isn't the
+  // active one; headings outside any `.level` block (itemLevel null) are
+  // ordinary always-visible content and are never dimmed.
+  function isInactiveHeading(itemLevel, activeLevel) {
+    return !!itemLevel && itemLevel !== activeLevel;
+  }
+  // mdBook's own built-in sidebar sub-heading feature (toc-*.js, unrelated
+  // to this template's own "On this page" nav in on-this-page.js) scans the
+  // page for every h2-h6 ONCE at load and lists them all under the active
+  // chapter, with no idea that some of them live inside a hidden `.level`
+  // block. Left alone, a reader sees "Tasks / Quiz / Flashcards" listed as
+  // if they were on the page right now while looking at the Overview level.
+  // This dims those entries instead of hiding them outright, because
+  // clicking one still works today (levels.js's own click handler below
+  // switches to the right level and reveals the target) — hiding the link
+  // would remove that shortcut, dimming just stops it from looking like
+  // ordinary unconditional content.
+  function syncSidebarHeadings(level) {
+    document.querySelectorAll('a.header-in-summary').forEach(function (a) {
+      var id = hashId(a.hash);
+      var target = id && document.getElementById(id);
+      var block = target && target.closest('.level');
+      var itemLevel = block ? levelFromClasses(Array.prototype.slice.call(block.classList)) : null;
+      var li = a.closest('li.header-item');
+      if (li) li.classList.toggle('hs-inactive', isInactiveHeading(itemLevel, level));
+    });
+  }
   function apply(level) {
     document.querySelectorAll('[data-levels]').forEach(function (tabs) {
       tabs.querySelectorAll('button').forEach(function (btn) {
@@ -36,6 +64,7 @@
     document.querySelectorAll('.level').forEach(function (el) {
       el.style.display = el.classList.contains(level) ? '' : 'none';
     });
+    syncSidebarHeadings(level);
     document.dispatchEvent(new CustomEvent('book:level-changed', { detail: { level: level } }));
   }
   // Sidebar and "On this page" links can point at headings inside a level
@@ -173,6 +202,7 @@
       storageKey: storageKey,
       levelForKey: levelForKey,
       countDrillItems: countDrillItems,
+      isInactiveHeading: isInactiveHeading,
     };
   }
 })();

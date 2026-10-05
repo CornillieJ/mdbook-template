@@ -55,3 +55,10 @@ test('number keys 1/2/3 map to the three levels, anything else to null', () => {
   assert.equal(levelForKey('4'), null);
   assert.equal(levelForKey('a'), null);
 });
+
+test('a sidebar sub-heading dims only when it belongs to a level that is not active', () => {
+  const { isInactiveHeading } = require('./levels.js');
+  assert.equal(isInactiveHeading('drill', 'overview'), true);
+  assert.equal(isInactiveHeading('drill', 'drill'), false);
+  assert.equal(isInactiveHeading(null, 'overview'), false, 'ungated headings are never dimmed');
+});

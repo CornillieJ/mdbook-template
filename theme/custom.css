@@ -344,6 +344,13 @@ hr {
 .sidebar .chapter li a:hover { color: var(--bk-sidebar-accent); }
 .sidebar .chapter li a strong { color: color-mix(in srgb, var(--bk-sidebar-accent) 75%, var(--sidebar-fg)) !important; }
 .sidebar .on-this-page { border-inline-start-width: 2px; border-inline-start-color: color-mix(in srgb, var(--bk-sidebar-accent) 45%, transparent); }
+/* A sidebar sub-heading whose section lives inside a `.level` block that
+   isn't the active one (set by levels.js's syncSidebarHeadings). It still
+   links and still works — levels.js switches level and reveals the target
+   on click — this only stops it from looking like it's on the page right
+   now when it isn't. */
+.sidebar .header-item.hs-inactive > .chapter-link-wrapper > a.header-in-summary { opacity: 0.45; }
+.sidebar .header-item.hs-inactive > .chapter-link-wrapper > a.header-in-summary:hover { opacity: 0.85; }
 
 /* Sidebar "done" mark: a small check badge in the "done" color. */
 .done-mark {

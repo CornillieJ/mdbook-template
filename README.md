@@ -6,9 +6,10 @@ sites, especially learning guides. Out of the box you get a polished theme
 Overview / Deep / Drill level tabs, quizzes, flashcards, side-by-side code
 compares, self-checks, a progress map, a pace planner, an animated layer
 explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
-a three-way diff view, an emoji-driven compatibility matrix, and a
-history timeline. Everything is driven by markup in your Markdown pages,
-so **writing a book never requires touching JavaScript**.
+a three-way diff view, an emoji-driven compatibility matrix, a history
+timeline, and a "copy as" picker for equivalent snippets. Everything is
+driven by markup in your Markdown pages, so **writing a book never
+requires touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -24,7 +25,7 @@ guide.
   - [Quiz](#quiz) · [Flashcards](#flashcards) · [Code compare](#code-compare)
   - [Progress map](#progress-map) · [Pace chooser](#pace-chooser) · [Layer explorer](#layer-explorer)
   - [Code walkthrough](#code-walkthrough) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
-  - [Compatibility matrix](#compatibility-matrix) · [Timeline](#timeline)
+  - [Compatibility matrix](#compatibility-matrix) · [Timeline](#timeline) · [Copy as](#copy-as)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -75,6 +76,7 @@ theme/
   diff-view.js            Before / Diff / After view of one patch
   compat-matrix.js        emoji-driven compatibility matrix
   timeline.js             a markdown list as a vertical dated timeline
+  copy-as.js              pick one of several equivalent snippets; pick remembered site-wide
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
@@ -394,6 +396,37 @@ Optional `data-title`. "Oldest"/"Latest" buttons jump to either end.
 </div>
 ```
 
+### Copy as
+
+`.copy-as[data-copy-as]` around 2+ fenced blocks (blank lines!) that are
+equivalent ways of doing the same thing, shown one at a time via a row
+of pills — never side by side, since there's no "compare" value in
+seeing the yarn command next to the pnpm command. `data-labels="A|B|C"`
+is **required** (pipe-separated): unlike code compare, labels can't be
+guessed from the language. Optional `data-default="2"` (1-based) picks
+the starting pane when the reader has no stored preference yet. The
+reader's last pick is remembered **for the whole book**, not just this
+block: choosing "yarn" once opens every `copy-as` block on "yarn" from
+then on, on any page.
+
+````html
+<div class="copy-as" data-copy-as data-labels="npm|yarn|pnpm">
+
+```bash
+npm install mdbook-template
+```
+
+```bash
+yarn add mdbook-template
+```
+
+```bash
+pnpm add mdbook-template
+```
+
+</div>
+````
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -407,6 +440,7 @@ Optional `data-title`. "Oldest"/"Latest" buttons jump to either end.
 | Focus on a Mermaid diagram | <kbd>+</kbd> <kbd>-</kbd> zoom, <kbd>0</kbd> reset, drag to pan, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+scroll to zoom |
 | Diff view tabs | <kbd>←</kbd> <kbd>→</kbd> switch Before/Diff/After |
 | Focus on a timeline dot | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move between stops |
+| Copy as pills | <kbd>←</kbd> <kbd>→</kbd> switch the visible snippet |
 
 Level keys are ignored while typing or when focus is in a quiz or deck.
 
@@ -434,7 +468,9 @@ Fonts (IBM Plex Sans/Mono) are loaded in `theme/head.hbs`; change the
 
 - `storagePrefix` (**change per book**): prefix of every localStorage key:
   `<prefix>:level`, `<prefix>:done:<slug>`, `<prefix>:known:<slug>:<n>`,
-  `<prefix>:check:<slug>:<n>`, `<prefix>:tracked`.
+  `<prefix>:check:<slug>:<n>`, `<prefix>:tracked`, `<prefix>:copyas-pref`
+  (the reader's last-picked "copy as" label, shared across every block in
+  the book).
 - `trackedChapters` (optional): slugs (file names without `.md`) counted
   in "N of M chapters done".
 
@@ -454,10 +490,11 @@ followed by a numbered list, a Mermaid diagram as its own source text
 inside a code block, a diff view as a plain ` ```diff ` block (still
 colored by highlight.js's built-in diff grammar, just not switchable),
 a compatibility matrix as its own plain Markdown table — the emoji and
-note text are already right there in the cells — and a timeline as a
-plain bulleted list. `mermaid-diagram.js` additionally only fetches
-Mermaid from the CDN on pages that contain a diagram — pages without one
-never pay for it.
+note text are already right there in the cells — a timeline as a plain
+bulleted list, and a copy-as block as a plain sequence of equivalent
+fenced snippets. `mermaid-diagram.js` additionally only fetches Mermaid
+from the CDN on pages that contain a diagram — pages without one never
+pay for it.
 
 ## Authoring gotchas
 

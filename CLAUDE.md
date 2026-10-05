@@ -4,8 +4,9 @@ This repo is a template for interactive mdBook sites (learning guides
 especially). Readers get level tabs, quizzes, flashcards, code compares,
 self-checks, a progress map, a pace chooser, a layer explorer, an annotated
 code walkthrough, themed Mermaid diagrams, a three-way diff view, an
-emoji-driven compatibility matrix and a history timeline, all driven by
-markup in the Markdown pages. **Writing a book never requires editing JS.**
+emoji-driven compatibility matrix, a history timeline and a "copy as"
+picker, all driven by markup in the Markdown pages. **Writing a book
+never requires editing JS.**
 
 ## Where things live
 
@@ -14,8 +15,8 @@ markup in the Markdown pages. **Writing a book never requires editing JS.**
 - `theme/book-config.js`: `window.BookConfig`. Set `storagePrefix` to a
   unique slug per book (localStorage keys are `<prefix>:level`,
   `<prefix>:done:<slug>`, `<prefix>:known:<slug>:<i>`,
-  `<prefix>:check:<slug>:<i>`, `<prefix>:tracked`). Optional
-  `trackedChapters: ['slug', ...]`.
+  `<prefix>:check:<slug>:<i>`, `<prefix>:tracked`, `<prefix>:copyas-pref`).
+  Optional `trackedChapters: ['slug', ...]`.
 - `theme/custom.css`: design tokens (recolor ONLY in the token block at the
   top: `--brand-1..4`, `--bk-confetti`, per-theme `--bk-*` for light, rust,
   navy, coal, ayu) + base styles. `theme/interactive.css`: widget styles.
@@ -54,6 +55,7 @@ markup in the Markdown pages. **Writing a book never requires editing JS.**
 - Diff view: `<div class="diff-view" data-diff-view>` + blank line + a fenced ` ```diff ` block (raw `git diff` output works — `diff --git`/`index`/`---`/`+++`/`@@` lines are stripped) + blank line + `</div>`. Three tabs: Before/Diff/After. Optional `data-labels="Before|Diff|After"`, `data-default="before|diff|after"` (default `diff`).
 - Compatibility matrix: `<div class="compat-matrix" data-compat-matrix>` + blank line + a plain Markdown table whose cells start with `✅`/`✓` (full), `⚠️`/`🟡` (partial) or `❌`/`✗` (none) + blank line + `</div>`. Text after the emoji is a note; cells with one become clickable, showing the note in a shared card below the table. First column and header untouched.
 - Timeline: `<div class="timeline" data-timeline>` + blank line + a Markdown list `- **label** body` + blank line + `</div>`; optional `data-title`. Every entry stays visible (no collapsing); click/arrow-key a dot to highlight + scroll to it.
+- Copy as: `<div class="copy-as" data-copy-as data-labels="A|B|C">` + blank line + 2+ fenced blocks (one shown at a time, never side by side) + blank line + `</div>`. `data-labels` is required (not guessed from language). Optional `data-default="2"` (1-based). The reader's pick is remembered site-wide (`<prefix>:copyas-pref`), so it carries over to every copy-as block on every page.
 
 ## Authoring rules
 

@@ -2,7 +2,7 @@
    Interactive widgets: quiz, flashcards, code-compare, progress map,
    pace chooser week-by-week timeline, layer explorer diagram, code
    walkthrough, mermaid diagrams, diff view, compatibility matrix, history
-   timeline, celebrations.
+   timeline, copy as, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -31,14 +31,14 @@
 }
 
 /* Shared button look for widget controls */
-.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn {
+.quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn, .ca-pill {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
 .fc-ready:focus-visible, .fc-ready button:focus-visible, .cc-tab:focus-visible,
 .layer-row:focus-visible, .le-trace-btn:focus-visible, .pm-stop a:focus-visible, .pm-btn:focus-visible,
 .cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible,
-.cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible {
+.cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible, .ca-pill:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -744,3 +744,17 @@
 @media (prefers-reduced-motion: reduce) {
   .tl-dot, .tl-entry { transition: none; }
 }
+
+/* ==========================================================================
+   Copy as
+   ========================================================================== */
+.copy-as.ca-ready { margin: 1.2em 0; }
+.copy-as.ca-ready pre { margin: 0 !important; border-top-left-radius: 0 !important; }
+.ca-pills { display: flex; gap: 0.3em; margin-bottom: -1px; position: relative; z-index: 1; padding-left: 0.4em; flex-wrap: wrap; }
+.ca-pill {
+  font-family: var(--ia-mono); font-size: 0.8em; font-weight: 600; color: var(--ia-muted);
+  padding: 0.35em 0.9em; border: 1px solid var(--ia-border); border-bottom: none;
+  border-radius: 8px 8px 0 0; background: transparent; transition: color 0.15s;
+}
+.ca-pill.ca-pill-active { background: var(--ia-surface); color: var(--fg, inherit); box-shadow: inset 0 3px 0 var(--ia-accent-2); }
+.copy-as.ca-ready pre:not(.ca-active) { display: none; }

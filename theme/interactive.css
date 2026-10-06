@@ -3,7 +3,8 @@
    pace chooser week-by-week timeline, layer explorer diagram, code
    walkthrough, mermaid diagrams, diff view, compatibility matrix, history
    timeline, copy as, branching scenario, glossary terms, reference tree,
-   fill-in-the-blank snippet, celebrations.
+   fill-in-the-blank snippet, command palette, decision table, before/after
+   slider, footnote popovers, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -33,7 +34,7 @@
 
 /* Shared button look for widget controls */
 .quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn, .ca-pill,
-.sc-choice, .sc-crumb, .sc-restart, .gl-term, .rt-toggle, .rt-all, .fi-copy {
+.sc-choice, .sc-crumb, .sc-restart, .gl-term, .rt-toggle, .rt-all, .fi-copy, .ba-handle, .fn-ref a {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
@@ -42,7 +43,9 @@
 .cw-badge:focus-visible, .cw-expand:focus-visible, .mmd-btn:focus-visible, .dv-tab:focus-visible,
 .cm-cell.cm-has-note:focus-visible, .tl-dot:focus-visible, .tl-jump-btn:focus-visible, .ca-pill:focus-visible,
 .sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible, .gl-term:focus-visible,
-.rt-toggle:focus-visible, .rt-all:focus-visible, .fi-field:focus-visible, .fi-copy:focus-visible {
+.rt-toggle:focus-visible, .rt-all:focus-visible, .fi-field:focus-visible, .fi-copy:focus-visible,
+.cp-input:focus-visible, .cp-result:focus-visible, .dt-toggle input:focus-visible, .ba-handle:focus-visible,
+.fn-ref a:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -881,3 +884,97 @@
 }
 .fi-copy:hover { border-color: var(--ia-accent-2); color: var(--ia-accent-2); }
 .fi-copy.fi-copied { border-color: var(--ia-ok); color: var(--ia-ok); background: color-mix(in srgb, var(--ia-ok) 10%, transparent); }
+
+/* ==========================================================================
+   Command palette
+   ========================================================================== */
+.cp-overlay {
+  position: fixed; inset: 0; z-index: 1000; display: flex; justify-content: center;
+  padding-top: 12vh; background: rgba(0, 0, 0, 0.35);
+}
+.cp-modal {
+  width: min(560px, calc(100vw - 2em)); max-height: 60vh; display: flex; flex-direction: column;
+  background: var(--bg, #fff); border-radius: var(--ia-radius); box-shadow: var(--ia-shadow);
+  border: 1px solid var(--ia-border); overflow: hidden;
+}
+.cp-input {
+  border: none; border-bottom: 1px solid var(--ia-border); padding: 0.8em 1em; font-size: 1.05em;
+  background: transparent; color: inherit;
+}
+.cp-results { list-style: none; margin: 0; padding: 0.4em; overflow-y: auto; }
+.cp-result {
+  display: flex; justify-content: space-between; gap: 1em; padding: 0.55em 0.7em; border-radius: 7px;
+  cursor: pointer; line-height: 1.3;
+}
+.cp-result.cp-active { background: var(--ia-surface-2); }
+.cp-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cp-kind { flex: none; font-size: 0.78em; color: var(--ia-muted); }
+.cp-flash { animation: cp-flash-fade 1.2s ease-out; }
+@keyframes cp-flash-fade {
+  0% { background: color-mix(in srgb, var(--ia-accent-2) 25%, transparent); }
+  100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cp-flash { animation: none; }
+}
+
+/* ==========================================================================
+   Decision table
+   ========================================================================== */
+.decision-table.dt-ready { margin: 1.2em 0; }
+.dt-controls { display: flex; flex-wrap: wrap; gap: 0.8em 1.4em; margin-bottom: 0.9em; }
+.dt-toggle { display: inline-flex; align-items: center; gap: 0.5em; font-size: 0.92em; cursor: pointer; }
+.dt-toggle input { width: 1.1em; height: 1.1em; accent-color: var(--ia-accent-2); }
+.decision-table.dt-ready table { width: 100%; }
+.decision-table.dt-ready tbody tr { transition: opacity 0.15s, background 0.15s; }
+.decision-table.dt-ready tbody tr.dt-match { background: color-mix(in srgb, var(--ia-ok) 10%, transparent); }
+.decision-table.dt-ready tbody tr.dt-nomatch { opacity: 0.45; }
+
+/* ==========================================================================
+   Before/after slider
+   ========================================================================== */
+.before-after.ba-ready { margin: 1.2em 0; }
+.ba-frame {
+  position: relative; overflow: hidden; border-radius: var(--ia-radius); border: 1px solid var(--ia-border);
+  line-height: 0; user-select: none; touch-action: none;
+}
+.ba-frame img { display: block; width: 100%; height: auto; }
+.ba-after-wrap { position: absolute; inset: 0; }
+.ba-after-wrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ba-tag {
+  position: absolute; top: 0.6em; padding: 0.25em 0.7em; font-size: 0.78em; font-weight: 600;
+  border-radius: 999px; background: rgba(0, 0, 0, 0.55); color: #fff;
+}
+.ba-tag-before { left: 0.6em; }
+.ba-tag-after { right: 0.6em; }
+.ba-handle {
+  position: absolute; top: 0; bottom: 0; width: 3px; background: var(--ia-accent-contrast);
+  box-shadow: 0 0 0 1px var(--ia-border); transform: translateX(-50%); cursor: ew-resize; border: none; padding: 0;
+}
+.ba-grip {
+  position: absolute; top: 50%; left: 50%; width: 2.2em; height: 2.2em; border-radius: 50%;
+  background: var(--ia-accent-contrast); box-shadow: var(--ia-shadow); transform: translate(-50%, -50%);
+}
+.ba-grip::before, .ba-grip::after {
+  content: ''; position: absolute; top: 50%; width: 0; height: 0; border-style: solid; transform: translateY(-50%);
+}
+.ba-grip::before { left: 0.55em; border-width: 0.35em 0.45em 0.35em 0; border-color: transparent var(--ia-accent-2) transparent transparent; }
+.ba-grip::after { right: 0.55em; border-width: 0.35em 0 0.35em 0.45em; border-color: transparent transparent transparent var(--ia-accent-2); }
+
+/* ==========================================================================
+   Footnote popovers
+   ========================================================================== */
+.fn-ref a { border-bottom: 1px dotted var(--ia-accent-2); }
+.fn-popover {
+  position: absolute; z-index: 60; max-width: min(320px, calc(100vw - 2em)); padding: 0.7em 0.9em;
+  background: var(--bg, #fff); color: var(--fg, inherit); border: 1px solid var(--ia-border);
+  border-radius: 9px; box-shadow: var(--ia-shadow); font-size: 0.88em; line-height: 1.5;
+  border-left: 4px solid var(--ia-accent-2); animation: fn-pop-in 0.12s ease-out;
+}
+.fn-popover p:first-child { margin-top: 0; }
+.fn-popover p:last-child { margin-bottom: 0; }
+.fn-popover.fn-above { border-left: none; border-top: 4px solid var(--ia-accent-2); }
+@keyframes fn-pop-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .fn-popover { animation: none; }
+}

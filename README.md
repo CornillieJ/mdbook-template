@@ -9,10 +9,12 @@ explorer, a numbered code walkthrough, themed, zoomable Mermaid diagrams,
 a three-way diff view, an emoji-driven compatibility matrix, a history
 timeline, a "copy as" picker for equivalent snippets, a branching
 "what would you do?" scenario, hover-term glossary definitions, a
-collapsible reference tree, and a fill-in-the-blank snippet for commands
-that need real values before they're useful. Everything is driven by
-markup in your Markdown pages, so **writing a book never requires
-touching JavaScript**.
+collapsible reference tree, a fill-in-the-blank snippet for commands
+that need real values before they're useful, a Ctrl/Cmd+K command
+palette, a checkbox-driven decision table, a before/after image slider,
+and footnote popovers. Everything is driven by markup in your Markdown
+pages (the command palette is global and needs none), so **writing a
+book never requires touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -30,6 +32,7 @@ guide.
   - [Code walkthrough](#code-walkthrough) · [Fill-in-the-blank snippet](#fill-in-the-blank-snippet) · [Mermaid diagram](#mermaid-diagram) · [Diff view](#diff-view)
   - [Compatibility matrix](#compatibility-matrix) · [Timeline](#timeline) · [Copy as](#copy-as)
   - [Branching scenario](#branching-scenario) · [Glossary term](#glossary-term) · [Reference tree](#reference-tree)
+  - [Command palette](#command-palette) · [Decision table](#decision-table) · [Before/after slider](#beforeafter-slider) · [Footnote popovers](#footnote-popovers)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -393,6 +396,43 @@ independently-written blocks; diff view is for a single small patch.
 </div>
 ````
 
+### Before/after slider
+
+`.before-after[data-before-after]` around two raw `<img>` tags (raw HTML,
+not Markdown): `<img data-before src="..">` and `<img data-after src="..">`.
+A draggable handle splits the two images; click anywhere on the image to
+jump the handle there, or focus it and use the arrow keys (<kbd>Home</kbd>/
+<kbd>End</kbd> jump to either end, <kbd>Shift</kbd> moves by 10%). Optional
+`data-labels="Before|After"`.
+
+```html
+<div class="before-after" data-before-after data-labels="Before|After">
+<img data-before src="old.png" alt="Old layout">
+<img data-after src="new.png" alt="New layout">
+</div>
+```
+
+### Decision table
+
+`.decision-table[data-decision-table]` around a plain Markdown table. A
+column becomes a checkbox toggle only if every body cell in it is a
+recognized glyph: `✅`/`✓` (required), `❌`/`✗` (forbidden), `—`/`-`
+(either). Toggling the checkboxes above the table highlights the row(s)
+whose conditions match and dims the rest. Any other column, such as an
+outcome, is left exactly as written.
+
+```html
+<div class="decision-table" data-decision-table>
+
+| Logged in | Admin role | Outcome |
+|---|---|---|
+| ✅ | ✅ | Full dashboard |
+| ✅ | ❌ | Read-only dashboard |
+| ❌ | — | Redirect to login |
+
+</div>
+```
+
 ### Compatibility matrix
 
 `.compat-matrix[data-compat-matrix]` around a plain Markdown table whose
@@ -519,6 +559,23 @@ No cross-page magic and no build step: it only reads the current page's
 `dfn` elements, the same "no dependencies" philosophy as every other
 widget here.
 
+### Footnote popovers
+
+No new markup: standard Markdown footnotes (`text[^label]` plus
+`[^label]: definition`), which mdBook already renders as a clickable
+reference. This widget only changes what clicking it does, showing the
+definition in a popover instead of jumping to the bottom of the page.
+Same mechanics as the glossary term widget: hover or focus to open,
+<kbd>Esc</kbd>/click elsewhere/losing focus to close, one popover open
+at a time.
+
+```markdown
+A cache hit skips the origin server entirely[^cache-hit].
+
+[^cache-hit]: A response saved so a later identical request can be
+answered without hitting the origin server again.
+```
+
 ### Reference tree
 
 `.ref-tree[data-ref-tree]` around a nested Markdown list (blank lines!).
@@ -543,10 +600,20 @@ instead). "Expand all"/"Collapse all" buttons sit above the tree.
 <kbd>↑</kbd> <kbd>↓</kbd> move between whatever toggles are currently
 visible.
 
+### Command palette
+
+No markup; this one is global and already active on every page.
+<kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> opens a fuzzy search over
+every chapter (read from the sidebar), the current page's `h2`/`h3`
+headings, and any `dfn[data-def]` glossary terms on it. Arrow keys move
+the selection, <kbd>Enter</kbd> jumps: to another chapter, to a heading
+on this page, or to a term (scrolled into view and opened).
+
 ## Keyboard shortcuts
 
 | Where | Keys |
 |---|---|
+| Any page | <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> open the command palette |
 | Any page with level tabs | <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> switch Overview / Deep / Drill |
 | Focus inside a quiz | <kbd>A</kbd>–<kbd>H</kbd> pick an option |
 | Focus on a flashcard deck | <kbd>Space</kbd>/<kbd>Enter</kbd> flip, <kbd>→</kbd> got it, <kbd>←</kbd> again, <kbd>S</kbd> shuffle, <kbd>R</kbd> restart |
@@ -555,6 +622,7 @@ visible.
 | Focus on a code-walk badge | <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> move between notes, digit keys jump to one |
 | Focus on a Mermaid diagram | <kbd>+</kbd> <kbd>-</kbd> zoom, <kbd>0</kbd> reset, drag to pan, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+scroll to zoom |
 | Diff view tabs | <kbd>←</kbd> <kbd>→</kbd> switch Before/Diff/After |
+| Focus on a before/after handle | <kbd>←</kbd> <kbd>→</kbd> move, <kbd>Shift</kbd> moves by 10%, <kbd>Home</kbd>/<kbd>End</kbd> jump to either end |
 | Focus on a timeline dot | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>Home</kbd> <kbd>End</kbd> move between stops |
 | Copy as pills | <kbd>←</kbd> <kbd>→</kbd> switch the visible snippet |
 | Focus inside a scenario | <kbd>A</kbd>–<kbd>H</kbd> pick a choice |
@@ -616,9 +684,14 @@ branching. A glossary term reads as plain italicized text (browsers
 already style `<dfn>` that way) with no popover. A reference tree is a
 perfectly ordinary nested list, and a fill-in-the-blank snippet is code
 with `{{NAME}}` tokens still visible as plain text, legible as "fill
-this in yourself" even unstyled. `mermaid-diagram.js` also only fetches
-Mermaid from the CDN on pages that contain a diagram; pages without one
-never pay for it.
+this in yourself" even unstyled. A decision table is a plain Markdown
+table with the condition glyphs still readable in each cell, and a
+before/after slider falls back to both images shown full-size, stacked.
+A footnote popover is a normal footnote link that jumps to its
+definition. `mermaid-diagram.js` also only fetches Mermaid from the CDN
+on pages that contain a diagram; pages without one never pay for it.
+The command palette has no markup to remove; drop its line from
+`additional-js` to turn it off everywhere.
 
 ## Authoring gotchas
 

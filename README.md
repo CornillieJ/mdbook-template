@@ -13,10 +13,10 @@ collapsible reference tree, a fill-in-the-blank snippet for commands
 that need real values before they're useful, a Ctrl/Cmd+K command
 palette, a checkbox-driven decision table, a before/after image slider,
 footnote popovers, "was this page helpful?" feedback, copy-link-to-heading
-buttons, and a colored-pill parameter table. Everything is driven by
-markup in your Markdown pages (the command palette and heading links are
-global and need none), so **writing a book never requires touching
-JavaScript**.
+buttons, a colored-pill parameter table, and a reading-time estimate.
+Everything is driven by markup in your Markdown pages (the command
+palette, heading links, and reading time are global and need none), so
+**writing a book never requires touching JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -35,7 +35,7 @@ guide.
   - [Compatibility matrix](#compatibility-matrix) · [Timeline](#timeline) · [Copy as](#copy-as)
   - [Branching scenario](#branching-scenario) · [Glossary term](#glossary-term) · [Reference tree](#reference-tree)
   - [Command palette](#command-palette) · [Decision table](#decision-table) · [Before/after slider](#beforeafter-slider) · [Footnote popovers](#footnote-popovers)
-  - [Page feedback](#page-feedback) · [Heading links](#heading-links) · [Parameter table](#parameter-table)
+  - [Page feedback](#page-feedback) · [Heading links](#heading-links) · [Parameter table](#parameter-table) · [Reading time](#reading-time)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -51,13 +51,19 @@ guide.
    `storagePrefix` in `theme/book-config.js` to a unique slug (for example
    `"git-guide"`). Two books on the same domain would otherwise share
    readers' progress.
-3. **Write chapters**: copy `templates/chapter.md` to `src/your-chapter.md`,
-   add it to `src/SUMMARY.md` and to the progress map in `src/README.md`.
-   Browse `src/components.md` (or the rendered *Component gallery*) for
-   every widget's markup. Delete the demo pages you don't want.
-4. **Preview**: `mdbook serve --open` (mdBook **v0.5.4**), or
+3. **Set up the pre-commit hook** (optional but recommended):
+   `git config core.hooksPath .githooks`. Every commit then runs the
+   widget tests and a full `mdbook build`, so a broken widget or a build
+   warning never gets committed.
+4. **Write chapters**: `scripts/new-chapter.sh "Chapter title"` copies
+   `templates/chapter.md` into `src/`, fills in the title, and wires it
+   into `src/SUMMARY.md` and the progress map in `src/README.md` for you
+   (run it with no arguments to be prompted). Browse `src/components.md`
+   (or the rendered *Component gallery*) for every widget's markup.
+   Delete the demo pages you don't want.
+5. **Preview**: `mdbook serve --open` (mdBook **v0.5.4**), or
    `docker compose up --build` and open <http://localhost:8080>.
-5. **Publish**:
+6. **Publish**:
    - **GitHub Pages**: in the repo, *Settings → Pages → Source: GitHub
      Actions*, and set `site-url = "/<repo>/"` in `book.toml`. Every push to
      `master` runs the tests, builds, and deploys
@@ -91,9 +97,19 @@ theme/
   glossary.js             hover-term definitions + same-page glossary index
   ref-tree.js             nested markdown list as a collapsible outline
   fill-in.js              {{NAME}} tokens in a code block become real inputs
+  command-palette.js      Ctrl/Cmd+K fuzzy search over chapters, headings, terms
+  decision-table.js       checkbox-driven condition table
+  before-after.js         draggable before/after image slider
+  footnote.js             footnote references shown as popovers
+  page-feedback.js        "was this page helpful?" thumbs + optional comment
+  heading-link.js         copy-link-to-heading button
+  param-table.js          colored-pill type/required/optional table
+  reading-time.js         "~N min read" estimate
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
+scripts/new-chapter.sh    scaffolds a new chapter (file + SUMMARY.md + progress map)
+.githooks/pre-commit      runs tests + build before every commit (opt in, see Quick start)
 CLAUDE.md                 instructions for AI assistants working on a book
 ```
 
@@ -641,6 +657,12 @@ No markup; also global. Hovering (or focusing) any `h2`/`h3`/`h4` with
 an id, which mdBook already gives every heading, reveals a small 🔗
 button that copies that section's URL to the clipboard.
 
+### Reading time
+
+No markup; also global. A "~N min read" line is injected right after a
+chapter's `h1`, computed from the page's own word count (`<pre>` blocks
+excluded) at roughly 200 words per minute.
+
 ### Page feedback
 
 `<div class="page-feedback" data-page-feedback></div>`, usually once at
@@ -742,9 +764,9 @@ type syntax still readable in each cell. A page-feedback prompt with no
 JavaScript renders nothing (there's no click to wire up, so it's safe to
 just leave the `<div>` in place or remove it). `mermaid-diagram.js` also
 only fetches Mermaid from the CDN on pages that contain a diagram; pages
-without one never pay for it. The command palette and heading links
-have no markup to remove; drop their lines from `additional-js` to turn
-them off everywhere.
+without one never pay for it. The command palette, heading links, and
+reading time have no markup to remove; drop their lines from
+`additional-js` to turn them off everywhere.
 
 ## Authoring gotchas
 

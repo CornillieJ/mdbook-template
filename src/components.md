@@ -33,6 +33,12 @@ a small 🔗 button that copies a link straight to that section.
 Also global and markup-free: every heading already has an id (mdBook
 gives it one), so there's nothing to add to a page.
 
+## Reading time
+
+The "~N min read" line right under this chapter's title is computed from
+the page's own word count (code blocks excluded) every time it loads.
+Global and markup-free, same as the command palette and heading links.
+
 ## Callouts
 
 Four flavours: `note` (information), `setup` (prerequisites, installs),

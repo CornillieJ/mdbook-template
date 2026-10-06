@@ -15,6 +15,16 @@ The [writing guide](writing-guide.md) has the full list.
 
 </div>
 
+## Command palette
+
+Press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> anywhere on this page to
+open a fuzzy search over every chapter, this page's headings, and any
+glossary term defined on it. Arrow keys move the selection, <kbd>Enter</kbd>
+jumps.
+
+This one is global and needs no markup: there's nothing to copy, it works
+on every page in the book already.
+
 ## Callouts
 
 Four flavours: `note` (information), `setup` (prerequisites, installs),
@@ -524,6 +534,66 @@ Reach for **code compare** instead when you want two complete,
 independently-written blocks side by side; diff view is for a single
 small patch.
 
+## Before/after slider
+
+Two stacked images with a draggable divider, for a visual comparison
+(a redesign, a chart before and after a fix) rather than text. Raw HTML,
+not Markdown: write the two `<img>` tags directly, same as the layer
+explorer.
+
+<div class="before-after" data-before-after data-labels="Dense table|Compat matrix">
+<img data-before src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='260'%3E%3Crect width='480' height='260' fill='%2344474f'/%3E%3Ctext x='50%25' y='46%25' fill='white' font-family='sans-serif' font-size='22' text-anchor='middle'%3EDense table%3C/text%3E%3Ctext x='50%25' y='62%25' fill='%23c9ccd4' font-family='sans-serif' font-size='14' text-anchor='middle'%3EPlain text status, no color%3C/text%3E%3C/svg%3E" alt="A plain table with text-only compatibility status, no color">
+<img data-after src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='260'%3E%3Crect width='480' height='260' fill='%231a8fbf'/%3E%3Ctext x='50%25' y='46%25' fill='white' font-family='sans-serif' font-size='22' text-anchor='middle'%3ECompat matrix%3C/text%3E%3Ctext x='50%25' y='62%25' fill='%23d6eef7' font-family='sans-serif' font-size='14' text-anchor='middle'%3EColor-coded, clickable notes%3C/text%3E%3C/svg%3E" alt="The same data as a color-coded compatibility matrix with clickable notes">
+</div>
+
+```html
+<div class="before-after" data-before-after data-labels="Before|After">
+<img data-before src="old.png" alt="Old layout">
+<img data-after src="new.png" alt="New layout">
+</div>
+```
+
+Drag the handle, click anywhere on the image, or focus the handle and use
+the arrow keys (<kbd>Home</kbd>/<kbd>End</kbd> jump to either end,
+<kbd>Shift</kbd> moves by 10%). `data-labels="Before|After"` is optional.
+Without JavaScript both images show full-size, stacked, each still
+labeled by its `alt` text.
+
+## Decision table
+
+An ordinary Markdown table where some columns are conditions and the
+rest is the outcome. Checkboxes appear above the table, one per
+condition column; toggling them highlights the row(s) that match and
+dims the rest.
+
+<div class="decision-table" data-decision-table>
+
+| Logged in | Admin role | Outcome |
+|---|---|---|
+| ✅ | ✅ | Full dashboard |
+| ✅ | ❌ | Read-only dashboard |
+| ❌ | — | Redirect to login |
+
+</div>
+
+```html
+<div class="decision-table" data-decision-table>
+
+| Logged in | Admin role | Outcome |
+|---|---|---|
+| ✅ | ✅ | Full dashboard |
+| ✅ | ❌ | Read-only dashboard |
+| ❌ | — | Redirect to login |
+
+</div>
+```
+
+A column only becomes a toggle if every one of its body cells is a
+recognized glyph: `✅`/`✓` (required), `❌`/`✗` (forbidden), `—`/`-`
+(don't care, matches either toggle state). Any other column, like
+"Outcome" here, is left exactly as written. Without JavaScript it's
+still a plain, readable table.
+
 ## Compatibility matrix
 
 An ordinary Markdown table whose status cells start with an emoji you'd
@@ -754,14 +824,14 @@ wrapper div needed. Hover or focus shows the definition in a small
 popover; tap toggles it on touch. Only one popover is open at a time,
 and <kbd>Esc</kbd> or a click elsewhere closes it.
 
-A cache entry is **<dfn data-def="Calling it once or many times has the same effect on the server.">idempotent</dfn>** if repeating the request doesn't change the outcome — unlike, say, incrementing a counter, which is <dfn data-def="Each call changes the result: calling it twice is not the same as calling it once.">non-idempotent</dfn>. A <dfn data-def="A response saved so a later identical request can be answered without hitting the origin server again.">cache hit</dfn> skips all of that and just replies from the saved copy.
+A cache entry is **<dfn data-def="Calling it once or many times has the same effect on the server.">idempotent</dfn>** if repeating the request doesn't change the outcome, unlike, say, incrementing a counter, which is <dfn data-def="Each call changes the result: calling it twice is not the same as calling it once.">non-idempotent</dfn>. A <dfn data-def="A response saved so a later identical request can be answered without hitting the origin server again.">cache hit</dfn> skips all of that and just replies from the saved copy.
 
 ```html
 A cache entry is <dfn data-def="Calling it once or many times has the same effect on the server.">idempotent</dfn> if repeating the request doesn't change the outcome.
 ```
 
-Drop a `[data-glossary-index]` anywhere — typically a reference chapter
-— to collect every `dfn` term already used **on that page**, deduplicated
+Drop a `[data-glossary-index]` anywhere, typically a reference chapter,
+to collect every `dfn` term already used **on that page**, deduplicated
 and sorted:
 
 <div data-glossary-index></div>
@@ -771,9 +841,32 @@ and sorted:
 ```
 
 No cross-page magic and no build step: it only ever reads the current
-page's `dfn` elements. Without JavaScript a `dfn` still reads fine —
+page's `dfn` elements. Without JavaScript a `dfn` still reads fine,
 browsers already italicize it by default, it just won't pop up a
 definition on hover.
+
+## Footnote popovers
+
+Standard Markdown footnotes, shown in a hover/focus popover instead of
+jumping to the bottom of the page. No new markup: mdBook already
+renders `[^label]` as a clickable reference; this widget only changes
+what clicking it does.
+
+Here's a claim that could use a source[^footnote-demo].
+
+[^footnote-demo]: This is the actual footnote definition at the bottom
+of the page. Hovering or clicking the `1` above shows this text in a
+popover instead of jumping down here.
+
+```markdown
+Here's a claim that could use a source[^footnote-demo].
+
+[^footnote-demo]: This is the actual footnote definition.
+```
+
+Only one popover is open at a time; <kbd>Esc</kbd>, a click elsewhere,
+or losing focus closes it. Without JavaScript it's a normal footnote
+link that jumps to its definition.
 
 ## Mark this chapter done
 

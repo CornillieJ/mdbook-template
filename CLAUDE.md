@@ -6,9 +6,11 @@ self-checks, a progress map, a pace chooser, a layer explorer, an annotated
 code walkthrough, themed Mermaid diagrams, a three-way diff view, an
 emoji-driven compatibility matrix, a history timeline, a "copy as"
 picker, a branching "what would you do?" scenario, hover-term glossary
-definitions, a collapsible reference tree and a fill-in-the-blank
-snippet, all driven by markup in the Markdown pages. **Writing a book
-never requires editing JS.**
+definitions, a collapsible reference tree, a fill-in-the-blank snippet,
+a Ctrl/Cmd+K command palette, a checkbox-driven decision table, a
+before/after image slider and footnote popovers, all driven by markup
+in the Markdown pages (the command palette is global and needs none).
+**Writing a book never requires editing JS.**
 
 ## Where things live
 
@@ -62,6 +64,10 @@ never requires editing JS.**
 - Glossary term: `<dfn data-def="...">word</dfn>` inline, anywhere in prose, no wrapper. Hover/focus shows the definition in a popover; tap toggles on touch; only one open at a time. Optional `<div data-glossary-index></div>` anywhere on a page collects every `dfn` already on THAT page (no cross-page magic) into a sorted, deduplicated list.
 - Reference tree: `<div class="ref-tree" data-ref-tree>` + blank line + a nested Markdown list (`- item` with indented sub-lists) + blank line + `</div>`. Top level starts expanded, deeper levels start collapsed; optional `data-expanded` starts everything open. Arrow keys: Right expand/move into first child, Left collapse/move to parent, Up/Down between visible toggles. No JS: still a plain nested list.
 - Fill-in-the-blank snippet: `<div class="fill-in" data-fill-in>` + blank line + a single fenced code block containing `{{NAME}}` or `{{NAME:default}}` tokens + blank line + `</div>`. Each token becomes a real `<input>` embedded in the code; repeats of the same NAME stay in sync. "Copy filled snippet" copies the current values (mdBook's own copy button would only copy the static template).
+- Command palette: no markup, global. `Ctrl`/`Cmd`+`K` fuzzy-searches chapter titles (from the sidebar), the current page's `h2`/`h3` headings, and `dfn[data-def]` glossary terms on it; arrow keys move, Enter jumps.
+- Decision table: `<div class="decision-table" data-decision-table>` + blank line + a plain Markdown table + blank line + `</div>`. A column becomes a checkbox toggle only if every body cell in it is `✅`/`✓` (required), `❌`/`✗` (forbidden) or `—`/`-` (either); toggling highlights matching rows and dims the rest. Any other column (an outcome) is left untouched.
+- Before/after slider: `<div class="before-after" data-before-after data-labels="Before|After">` + raw `<img data-before src="..">` + `<img data-after src="..">` + `</div>` (raw HTML, not Markdown). Drag the handle or click to compare; `data-labels` is optional.
+- Footnote popovers: standard Markdown footnotes (`text[^label]` + `[^label]: definition`). No new markup: this only changes what clicking the rendered footnote reference does, showing the definition in a popover instead of jumping to the page bottom.
 
 ## Authoring rules
 

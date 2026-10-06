@@ -46,4 +46,8 @@ additional-js = [
     "theme/glossary.js",
     "theme/ref-tree.js",
     "theme/fill-in.js",
+    "theme/command-palette.js",
+    "theme/decision-table.js",
+    "theme/before-after.js",
+    "theme/footnote.js",
 ]

@@ -50,4 +50,7 @@ additional-js = [
     "theme/decision-table.js",
     "theme/before-after.js",
     "theme/footnote.js",
+    "theme/page-feedback.js",
+    "theme/heading-link.js",
+    "theme/param-table.js",
 ]

@@ -25,6 +25,14 @@ jumps.
 This one is global and needs no markup: there's nothing to copy, it works
 on every page in the book already.
 
+## Heading links
+
+Hover any `##`/`###`/`####` heading on this page (try this one) to reveal
+a small 🔗 button that copies a link straight to that section.
+
+Also global and markup-free: every heading already has an id (mdBook
+gives it one), so there's nothing to add to a page.
+
 ## Callouts
 
 Four flavours: `note` (information), `setup` (prerequisites, installs),
@@ -594,6 +602,41 @@ recognized glyph: `✅`/`✓` (required), `❌`/`✗` (forbidden), `—`/`-`
 "Outcome" here, is left exactly as written. Without JavaScript it's
 still a plain, readable table.
 
+## Parameter table
+
+An ordinary Markdown table whose `Type` column uses a small type-syntax,
+rendered as colored pills: a trailing `?` marks the whole cell optional,
+`Name[]` marks a segment an array, and `A\|B` renders a union.
+
+<div class="param-table" data-param-table>
+
+| Name | Type | Description |
+|---|---|---|
+| `id` | `string` | The resource id. |
+| `limit` | `number?` | Max results, default 20. |
+| `tags` | `string[]?` | Filter results by tag. |
+| `sort` | `"asc"\|"desc"?` | Sort order, default `"asc"`. |
+
+</div>
+
+```html
+<div class="param-table" data-param-table>
+
+| Name | Type | Description |
+|---|---|---|
+| `id` | `string` | The resource id. |
+| `limit` | `number?` | Max results, default 20. |
+| `tags` | `string[]?` | Filter results by tag. |
+
+</div>
+```
+
+The column is matched by header text (`Type`, case-insensitive); known
+primitive names (`string`, `number`, `boolean`, `object`, `array`,
+`function`, `any`, `null`, `undefined`) get their own color, a custom
+type name gets a neutral pill, and a quoted segment (`"asc"`) renders as
+a literal. Without JavaScript the column is still plain, readable text.
+
 ## Compatibility matrix
 
 An ordinary Markdown table whose status cells start with an emoji you'd
@@ -882,3 +925,20 @@ progress map, and celebrates.
 ```
 
 The button text is yours; `data-done-text` sets the text once done.
+
+## Page feedback
+
+A "Was this page helpful?" prompt, usually placed once at the end of a
+chapter. A "No" reveals an optional comment box before submitting; either
+way the vote is remembered so the question doesn't reappear.
+
+<div class="page-feedback" data-page-feedback></div>
+
+```html
+<div class="page-feedback" data-page-feedback></div>
+```
+
+Optional `data-webhook="https://example.com/feedback"` POSTs
+`{ slug, vote, comment }` as JSON on submit (fire-and-forget; the vote is
+saved locally either way). Without a webhook the vote is still recorded
+locally, just not sent anywhere, so wire one up to actually collect it.

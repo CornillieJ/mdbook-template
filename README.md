@@ -12,9 +12,11 @@ timeline, a "copy as" picker for equivalent snippets, a branching
 collapsible reference tree, a fill-in-the-blank snippet for commands
 that need real values before they're useful, a Ctrl/Cmd+K command
 palette, a checkbox-driven decision table, a before/after image slider,
-and footnote popovers. Everything is driven by markup in your Markdown
-pages (the command palette is global and needs none), so **writing a
-book never requires touching JavaScript**.
+footnote popovers, "was this page helpful?" feedback, copy-link-to-heading
+buttons, and a colored-pill parameter table. Everything is driven by
+markup in your Markdown pages (the command palette and heading links are
+global and need none), so **writing a book never requires touching
+JavaScript**.
 
 The book in `src/` is both a demo and the documentation: a worked example
 chapter, a live component gallery with copy-paste markup, and a writing
@@ -33,6 +35,7 @@ guide.
   - [Compatibility matrix](#compatibility-matrix) · [Timeline](#timeline) · [Copy as](#copy-as)
   - [Branching scenario](#branching-scenario) · [Glossary term](#glossary-term) · [Reference tree](#reference-tree)
   - [Command palette](#command-palette) · [Decision table](#decision-table) · [Before/after slider](#beforeafter-slider) · [Footnote popovers](#footnote-popovers)
+  - [Page feedback](#page-feedback) · [Heading links](#heading-links) · [Parameter table](#parameter-table)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -433,6 +436,29 @@ outcome, is left exactly as written.
 </div>
 ```
 
+### Parameter table
+
+`.param-table[data-param-table]` around a plain Markdown table with a
+`Type` column (matched by header text, case-insensitive). That column's
+cells use a small type-syntax: a trailing `?` marks the whole cell
+optional, `Name[]` marks a segment an array, and `A\|B` (escaped, like
+any Markdown table cell with a literal pipe) renders a union of pills.
+Known primitive names (`string`, `number`, `boolean`, `object`, `array`,
+`function`, `any`, `null`, `undefined`) get their own color; any other
+name gets a neutral pill, and a quoted segment (`"asc"`) renders as a
+literal.
+
+```html
+<div class="param-table" data-param-table>
+
+| Name | Type | Description |
+|---|---|---|
+| `id` | `string` | The resource id. |
+| `limit` | `number?` | Max results, default 20. |
+
+</div>
+```
+
 ### Compatibility matrix
 
 `.compat-matrix[data-compat-matrix]` around a plain Markdown table whose
@@ -609,6 +635,29 @@ headings, and any `dfn[data-def]` glossary terms on it. Arrow keys move
 the selection, <kbd>Enter</kbd> jumps: to another chapter, to a heading
 on this page, or to a term (scrolled into view and opened).
 
+### Heading links
+
+No markup; also global. Hovering (or focusing) any `h2`/`h3`/`h4` with
+an id, which mdBook already gives every heading, reveals a small 🔗
+button that copies that section's URL to the clipboard.
+
+### Page feedback
+
+`<div class="page-feedback" data-page-feedback></div>`, usually once at
+the end of a chapter. Thumbs up/down; "No" reveals an optional comment
+box before submitting. Either way the vote is remembered per browser so
+the question doesn't reappear on a later visit.
+
+```html
+<div class="page-feedback" data-page-feedback></div>
+```
+
+Optional `data-webhook="https://example.com/feedback"` POSTs
+`{ slug, vote, comment }` as JSON on submit (fire-and-forget: a failed
+request doesn't block the thank-you message, since the vote is already
+saved locally). Without a webhook the vote is still recorded locally,
+just not sent anywhere.
+
 ## Keyboard shortcuts
 
 | Where | Keys |
@@ -688,10 +737,14 @@ this in yourself" even unstyled. A decision table is a plain Markdown
 table with the condition glyphs still readable in each cell, and a
 before/after slider falls back to both images shown full-size, stacked.
 A footnote popover is a normal footnote link that jumps to its
-definition. `mermaid-diagram.js` also only fetches Mermaid from the CDN
-on pages that contain a diagram; pages without one never pay for it.
-The command palette has no markup to remove; drop its line from
-`additional-js` to turn it off everywhere.
+definition, and a parameter table is a plain Markdown table with the
+type syntax still readable in each cell. A page-feedback prompt with no
+JavaScript renders nothing (there's no click to wire up, so it's safe to
+just leave the `<div>` in place or remove it). `mermaid-diagram.js` also
+only fetches Mermaid from the CDN on pages that contain a diagram; pages
+without one never pay for it. The command palette and heading links
+have no markup to remove; drop their lines from `additional-js` to turn
+them off everywhere.
 
 ## Authoring gotchas
 

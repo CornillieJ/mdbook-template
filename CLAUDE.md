@@ -8,9 +8,11 @@ emoji-driven compatibility matrix, a history timeline, a "copy as"
 picker, a branching "what would you do?" scenario, hover-term glossary
 definitions, a collapsible reference tree, a fill-in-the-blank snippet,
 a Ctrl/Cmd+K command palette, a checkbox-driven decision table, a
-before/after image slider and footnote popovers, all driven by markup
-in the Markdown pages (the command palette is global and needs none).
-**Writing a book never requires editing JS.**
+before/after image slider, footnote popovers, "was this page helpful?"
+feedback, copy-link-to-heading buttons and a colored-pill parameter
+table, all driven by markup in the Markdown pages (the command palette
+and heading links are global and need none). **Writing a book never
+requires editing JS.**
 
 ## Where things live
 
@@ -68,6 +70,9 @@ in the Markdown pages (the command palette is global and needs none).
 - Decision table: `<div class="decision-table" data-decision-table>` + blank line + a plain Markdown table + blank line + `</div>`. A column becomes a checkbox toggle only if every body cell in it is `✅`/`✓` (required), `❌`/`✗` (forbidden) or `—`/`-` (either); toggling highlights matching rows and dims the rest. Any other column (an outcome) is left untouched.
 - Before/after slider: `<div class="before-after" data-before-after data-labels="Before|After">` + raw `<img data-before src="..">` + `<img data-after src="..">` + `</div>` (raw HTML, not Markdown). Drag the handle or click to compare; `data-labels` is optional.
 - Footnote popovers: standard Markdown footnotes (`text[^label]` + `[^label]: definition`). No new markup: this only changes what clicking the rendered footnote reference does, showing the definition in a popover instead of jumping to the page bottom.
+- Page feedback: `<div class="page-feedback" data-page-feedback></div>`, usually once at the end of a chapter. Thumbs up/down; "No" reveals an optional comment box. The vote is remembered locally so the question doesn't reappear. Optional `data-webhook="https://.."` POSTs `{ slug, vote, comment }` on submit.
+- Heading links: no markup, global. Hovering any `h2`/`h3`/`h4` with an id reveals a 🔗 button that copies that section's URL.
+- Parameter table: `<div class="param-table" data-param-table>` + blank line + a plain Markdown table with a `Type` column + blank line + `</div>`. That column's cells use a small type-syntax: trailing `?` marks the cell optional, `Name[]` marks a segment an array, `A\|B` (escaped, like any Markdown table cell with a literal pipe) renders a union of colored pills.
 
 ## Authoring rules
 

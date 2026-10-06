@@ -4,7 +4,8 @@
    walkthrough, mermaid diagrams, diff view, compatibility matrix, history
    timeline, copy as, branching scenario, glossary terms, reference tree,
    fill-in-the-blank snippet, command palette, decision table, before/after
-   slider, footnote popovers, celebrations.
+   slider, footnote popovers, page feedback, heading links, parameter
+   table, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -34,7 +35,8 @@
 
 /* Shared button look for widget controls */
 .quiz-score button, .quiz-result button, .fc-ready button, .le-trace-btn, .pm-btn, .cw-expand, .mmd-btn, .dv-tab, .tl-dot, .tl-jump-btn, .ca-pill,
-.sc-choice, .sc-crumb, .sc-restart, .gl-term, .rt-toggle, .rt-all, .fi-copy, .ba-handle, .fn-ref a {
+.sc-choice, .sc-crumb, .sc-restart, .gl-term, .rt-toggle, .rt-all, .fi-copy, .ba-handle, .fn-ref a,
+.pf-vote, .pf-send, .pf-skip, .hl-link {
   font: inherit; color: inherit; cursor: pointer;
 }
 .quiz-opt:focus-visible, .qs-dot:focus-visible, .qs-reset:focus-visible, .qr-again:focus-visible,
@@ -45,7 +47,8 @@
 .sc-choice:focus-visible, .sc-crumb:focus-visible, .sc-restart:focus-visible, .gl-term:focus-visible,
 .rt-toggle:focus-visible, .rt-all:focus-visible, .fi-field:focus-visible, .fi-copy:focus-visible,
 .cp-input:focus-visible, .cp-result:focus-visible, .dt-toggle input:focus-visible, .ba-handle:focus-visible,
-.fn-ref a:focus-visible {
+.fn-ref a:focus-visible, .pf-vote:focus-visible, .pf-send:focus-visible, .pf-skip:focus-visible,
+.pf-comment:focus-visible, .hl-link:focus-visible {
   outline: none; box-shadow: var(--ia-focus);
 }
 
@@ -978,3 +981,69 @@
 @media (prefers-reduced-motion: reduce) {
   .fn-popover { animation: none; }
 }
+
+/* ==========================================================================
+   Page feedback
+   ========================================================================== */
+.page-feedback.pf-ready {
+  margin: 2em 0 1em; padding: 1em 1.2em; border: 1px solid var(--ia-border);
+  border-radius: var(--ia-radius); background: var(--ia-surface);
+}
+.pf-question { margin: 0 0 0.7em; font-weight: 600; }
+.pf-votes { display: flex; gap: 0.6em; }
+.pf-vote {
+  border: 1.5px solid var(--ia-border); border-radius: 999px; padding: 0.4em 1em; font-size: 0.9em;
+  font-weight: 600; background: transparent; transition: border-color 0.15s, background 0.15s;
+}
+.pf-vote:hover { border-color: var(--ia-accent-2); background: var(--ia-surface-2); }
+.pf-comment {
+  width: 100%; box-sizing: border-box; font: inherit; color: inherit; background: var(--bg, #fff);
+  border: 1.5px solid var(--ia-border); border-radius: 8px; padding: 0.6em 0.8em; resize: vertical;
+}
+.pf-actions { display: flex; gap: 0.6em; margin-top: 0.7em; }
+.pf-send, .pf-skip {
+  border: 1.5px solid var(--ia-border); border-radius: 999px; padding: 0.35em 1em; font-size: 0.85em;
+  font-weight: 600; background: transparent;
+}
+.pf-send { border-color: var(--ia-accent-2); color: var(--ia-accent-2); }
+.pf-skip { color: var(--ia-muted); }
+.pf-thanks { margin: 0; color: var(--ia-ok); font-weight: 600; }
+
+/* ==========================================================================
+   Heading links
+   ========================================================================== */
+.hl-heading { position: relative; }
+.hl-link {
+  display: inline-flex; align-items: center; justify-content: center; width: 1.6em; height: 1.6em;
+  margin-left: 0.3em; border: none; border-radius: 6px; background: transparent; opacity: 0;
+  font-size: 0.6em; vertical-align: middle; transition: opacity 0.1s, background 0.1s;
+}
+.hl-heading:hover .hl-link, .hl-link:focus-visible { opacity: 1; }
+.hl-link:hover { background: var(--ia-surface-2); }
+.hl-link.hl-copied::after {
+  content: 'Copied!'; position: absolute; top: -1.6em; left: 0; font-size: 0.7em; font-weight: 600;
+  color: var(--ia-ok); white-space: nowrap;
+}
+
+/* ==========================================================================
+   Parameter table
+   ========================================================================== */
+.param-table.pt-ready table { width: 100%; }
+.pt-pill {
+  display: inline-block; padding: 0.1em 0.55em; border-radius: 999px; font-family: var(--ia-mono);
+  font-size: 0.85em; font-weight: 600; background: var(--ia-surface-2); color: inherit;
+}
+.pt-pill.pt-str { background: color-mix(in srgb, var(--ia-ok) 18%, transparent); color: var(--ia-ok); }
+.pt-pill.pt-num { background: color-mix(in srgb, var(--ia-accent-2) 18%, transparent); color: var(--ia-accent-2); }
+.pt-pill.pt-bool { background: color-mix(in srgb, var(--ia-accent) 16%, transparent); color: var(--ia-accent); }
+.pt-pill.pt-obj, .pt-pill.pt-arr, .pt-pill.pt-fn { background: color-mix(in srgb, var(--pc-c4) 18%, transparent); color: var(--pc-c4); }
+.pt-pill.pt-any, .pt-pill.pt-null, .pt-pill.pt-undef { background: var(--ia-surface-2); color: var(--ia-muted); }
+.pt-pill.pt-lit { background: color-mix(in srgb, var(--pc-c5) 18%, transparent); color: var(--pc-c5); }
+.pt-pill.pt-other { background: var(--ia-surface-2); color: inherit; }
+.pt-or { margin: 0 0.3em; font-size: 0.78em; color: var(--ia-muted); }
+.pt-flag {
+  display: inline-block; margin-left: 0.5em; padding: 0.05em 0.5em; border-radius: 999px;
+  font-size: 0.72em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+}
+.pt-flag.pt-required { background: var(--ia-surface-2); color: var(--ia-muted); }
+.pt-flag.pt-optional { background: color-mix(in srgb, var(--ia-warn) 18%, transparent); color: var(--ia-warn); }

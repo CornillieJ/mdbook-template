@@ -5,7 +5,7 @@
    timeline, copy as, branching scenario, glossary terms, reference tree,
    fill-in-the-blank snippet, command palette, decision table, before/after
    slider, footnote popovers, page feedback, heading links, parameter
-   table, celebrations.
+   table, reading time, celebrations.
    Tokens come from custom.css (--bk-*, --brand-*) with fallbacks, so this
    file never needs editing to recolor the book. --ia-* are private aliases.
    ========================================================================== */
@@ -1047,3 +1047,8 @@
 }
 .pt-flag.pt-required { background: var(--ia-surface-2); color: var(--ia-muted); }
 .pt-flag.pt-optional { background: color-mix(in srgb, var(--ia-warn) 18%, transparent); color: var(--ia-warn); }
+
+/* ==========================================================================
+   Reading time
+   ========================================================================== */
+.rd-time { margin: -0.3em 0 1.4em; font-size: 0.88em; color: var(--ia-muted); }

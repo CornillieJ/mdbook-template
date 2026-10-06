@@ -53,4 +53,5 @@ additional-js = [
     "theme/page-feedback.js",
     "theme/heading-link.js",
     "theme/param-table.js",
+    "theme/reading-time.js",
 ]

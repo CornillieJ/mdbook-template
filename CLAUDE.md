@@ -32,6 +32,8 @@ need none). **Writing a book never requires editing JS.**
 - `src/`: the book. `src/components.md` is the live gallery with the markup
   for every widget; `src/writing-guide.md` has the authoring rules.
 - `templates/chapter.md`: starter for a new chapter (copy into `src/`).
+- `templates/languages/`: starter `SUMMARY.md` and root `README.md` for a
+  book with a language toggle (see "Languages").
 
 ## Creating a book from this template
 
@@ -44,6 +46,36 @@ need none). **Writing a book never requires editing JS.**
 3. Optionally recolor via the token block in `theme/custom.css`.
 4. Optionally `git config core.hooksPath .githooks` once, so every
    commit runs the widget tests and a full build first.
+
+## Languages (optional language toggle)
+
+A book can have one folder per language: `src/EN/`, `src/NL/`, any names.
+A fixed pill in the bottom-left corner shows the folder names as they are
+written, and switches to the same page in the other folder. One mdBook,
+one `SUMMARY.md`, so plain `mdbook build` and `mdbook serve` keep working.
+
+1. In `theme/book-config.js` set `languages: ['EN', 'NL']`. The first name
+   is the default. Optional: `languageTitles: { EN: '...', NL: '...' }`
+   (top bar and tab title) and `readingTimeLabels: { NL: '~{n} min leestijd' }`.
+2. Move the chapters into the folders. Each folder holds the same file and
+   folder names, because the toggle maps `EN/it/plan.html` to
+   `NL/it/plan.html`. Links between chapters stay relative inside a folder.
+3. Copy `templates/languages/README.md` to `src/README.md` (the language
+   chooser, only seen without JavaScript) and use `templates/languages/SUMMARY.md`
+   as the pattern for `src/SUMMARY.md`: first `[Language](README.md)`, then
+   for each folder a list item for its home page (`- [Welcome](EN/README.md)`),
+   its part titles and its chapters.
+4. The script handles the rest: it hides the sidebar entries, prev/next links
+   and search hits of the other languages, numbers the visible chapters again
+   from 1 (a language's home page has no number), sets `<html lang>`, sends
+   the root page to the saved or browser language, and remembers the choice in
+   `<prefix>:language`.
+
+Gotchas: every page needs a twin with the same path in each folder (a
+missing twin sends the reader to that language's home page). `print.html`
+still contains every language. The mdBook interface text (search box, button
+tooltips) stays English. Single-language books leave `languages: null` and
+the script does nothing.
 
 ## Markup contract (see src/components.md for full examples)
 
@@ -75,6 +107,7 @@ need none). **Writing a book never requires editing JS.**
 - Footnote popovers: standard Markdown footnotes (`text[^label]` + `[^label]: definition`). No new markup: this only changes what clicking the rendered footnote reference does, showing the definition in a popover instead of jumping to the page bottom.
 - Page feedback: `<div class="page-feedback" data-page-feedback></div>`, usually once at the end of a chapter. Thumbs up/down; "No" reveals an optional comment box. The vote is remembered locally so the question doesn't reappear. Optional `data-webhook="https://.."` POSTs `{ slug, vote, comment }` on submit.
 - Heading links: no markup, global. Hovering any `h2`/`h3`/`h4` with an id reveals a 🔗 button that copies that section's URL.
+- Language toggle: no markup, global, only active when `BookConfig.languages` lists 2+ folders (see "Languages").
 - Reading time: no markup, global. A "~N min read" line injected after a chapter's `h1`, computed from the page's own word count (code blocks excluded) at ~200 words/minute.
 - Parameter table: `<div class="param-table" data-param-table>` + blank line + a plain Markdown table with a `Type` column + blank line + `</div>`. That column's cells use a small type-syntax: trailing `?` marks the cell optional, `Name[]` marks a segment an array, `A\|B` (escaped, like any Markdown table cell with a literal pipe) renders a union of colored pills.
 

@@ -18,6 +18,15 @@
     // toast just says "Chapter done!".
     //   trackedChapters: ['example-chapter', 'components'],
     trackedChapters: null,
+
+    // Optional: language folders in src/, for the language toggle in the
+    // bottom-left corner. The toggle shows these names as they are written.
+    // The first one is the default. null = a single-language book.
+    // See "Languages" in CLAUDE.md for the folder layout.
+    //   languages: ['EN', 'NL'],
+    //   languageTitles: { EN: 'My Book', NL: 'Mijn boek' },  // top bar and tab title, optional
+    //   readingTimeLabels: { NL: '~{n} min leestijd' },      // default '~{n} min read', optional
+    languages: null,
   };
 
   if (typeof window === 'undefined') return;

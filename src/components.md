@@ -39,6 +39,13 @@ The "~N min read" line right under this chapter's title is computed from
 the page's own word count (code blocks excluded) every time it loads.
 Global and markup-free, same as the command palette and heading links.
 
+## Language toggle
+
+Not shown on this page, because the template is a single-language book.
+When `languages: ['EN', 'NL']` is set in `theme/book-config.js` and the
+chapters live in `src/EN/` and `src/NL/`, a pill with those names appears in
+the bottom-left corner. See "Languages" in `README.md`.
+
 ## Callouts
 
 Four flavours: `note` (information), `setup` (prerequisites, installs),

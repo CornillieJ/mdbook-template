@@ -55,7 +55,7 @@
     var items = [];
     document.querySelectorAll('#mdbook-sidebar a[href]').forEach(function (a) {
       var title = a.textContent.replace(/\s+/g, ' ').trim();
-      if (!title || !a.getAttribute('href')) return;
+      if (!title || !a.getAttribute('href') || a.closest('[hidden]')) return;
       items.push({ kind: 'chapter', title: title, href: a.getAttribute('href') });
     });
     var main = document.querySelector('#mdbook-content main') || document.querySelector('main');

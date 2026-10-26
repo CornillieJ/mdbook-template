@@ -23,6 +23,15 @@
     return Math.max(1, Math.round(wordCount / wpm));
   }
 
+  // The label can be set per language folder in BookConfig.readingTimeLabels,
+  // for example { NL: '~{n} min leestijd' }. {n} stands for the minutes.
+  function readingLabel(minutes) {
+    var labels = (window.BookConfig || {}).readingTimeLabels || {};
+    var language = document.documentElement.getAttribute('data-language');
+    var template = (language && labels[language]) || '~{n} min read';
+    return template.replace('{n}', minutes);
+  }
+
   function wire() {
     var main = document.querySelector('#mdbook-content main') || document.querySelector('main');
     if (!main) return;
@@ -35,7 +44,7 @@
 
     var badge = document.createElement('p');
     badge.className = 'rd-time';
-    badge.textContent = '~' + minutes + ' min read';
+    badge.textContent = readingLabel(minutes);
     h1.insertAdjacentElement('afterend', badge);
   }
 

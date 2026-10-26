@@ -36,6 +36,7 @@ guide.
   - [Branching scenario](#branching-scenario) · [Glossary term](#glossary-term) · [Reference tree](#reference-tree)
   - [Command palette](#command-palette) · [Decision table](#decision-table) · [Before/after slider](#beforeafter-slider) · [Footnote popovers](#footnote-popovers)
   - [Page feedback](#page-feedback) · [Heading links](#heading-links) · [Parameter table](#parameter-table) · [Reading time](#reading-time)
+- [Languages](#languages)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Recoloring](#recoloring)
 - [Configuration and storage](#configuration-and-storage)
@@ -105,9 +106,11 @@ theme/
   heading-link.js         copy-link-to-heading button
   param-table.js          colored-pill type/required/optional table
   reading-time.js         "~N min read" estimate
+  language-toggle.js      bottom-left language pill for books with one folder per language
   *.test.js               node:test unit tests for the pure helpers
 src/                      the book (welcome, example chapter, gallery, writing guide)
 templates/chapter.md      copy-paste starter for a new chapter (not built)
+templates/languages/      starter SUMMARY.md + root README.md for a multi-language book (not built)
 scripts/new-chapter.sh    scaffolds a new chapter (file + SUMMARY.md + progress map)
 .githooks/pre-commit      runs tests + build before every commit (opt in, see Quick start)
 CLAUDE.md                 instructions for AI assistants working on a book
@@ -679,6 +682,42 @@ Optional `data-webhook="https://example.com/feedback"` POSTs
 request doesn't block the thank-you message, since the vote is already
 saved locally). Without a webhook the vote is still recorded locally,
 just not sent anywhere.
+
+## Languages
+
+Optional. A book can keep one folder of Markdown per language (`src/EN/`,
+`src/NL/`, any names). A fixed pill in the bottom-left corner shows the
+folder names and switches to the same page in the other folder. It is still
+one mdBook with one `SUMMARY.md`, so `mdbook build` and `mdbook serve` work
+as usual.
+
+```js
+// theme/book-config.js
+languages: ['EN', 'NL'],                              // first = default; null = off
+languageTitles: { EN: 'My Book', NL: 'Mijn boek' },   // optional
+readingTimeLabels: { NL: '~{n} min leestijd' },       // optional
+```
+
+Layout:
+
+```
+src/
+  README.md          language chooser (from templates/languages/README.md)
+  SUMMARY.md         [Language](README.md), then each folder's home page, parts and chapters
+  EN/README.md  EN/intro.md  EN/guide/setup.md
+  NL/README.md  NL/intro.md  NL/guide/setup.md
+```
+
+Both folders use the same file names. `templates/languages/SUMMARY.md` shows
+the pattern. The script hides the other languages' sidebar entries,
+prev/next links and search hits, numbers the visible chapters again from 1
+(a language's home page has no number), sets `<html lang>`, sends the root
+page to the saved or browser language, and remembers the choice under
+`<prefix>:language`. A page with no twin in the other folder sends the reader
+to that folder's home page.
+
+Known limits: `print.html` contains every language, and mdBook's own
+interface text (search box, tooltips) stays English.
 
 ## Keyboard shortcuts
 

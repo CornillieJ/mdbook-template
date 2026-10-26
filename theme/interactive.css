@@ -1052,3 +1052,22 @@
    Reading time
    ========================================================================== */
 .rd-time { margin: -0.3em 0 1.4em; font-size: 0.88em; color: var(--ia-muted); }
+
+/* ==========================================================================
+   Language toggle
+   ========================================================================== */
+[hidden] { display: none !important; }
+.lang-toggle {
+  position: fixed; left: 12px; bottom: 12px; z-index: 110; display: flex; gap: 2px; padding: 3px;
+  background: var(--ia-surface); border: 1px solid var(--ia-border); border-radius: 999px;
+  box-shadow: var(--bk-shadow, 0 2px 8px rgba(0, 0, 0, 0.15));
+}
+.lang-toggle button {
+  min-width: 2.6em; padding: 0.3em 0.8em; border: 0; border-radius: 999px; background: transparent;
+  color: var(--ia-muted); font: inherit; font-size: 0.85em; font-weight: 600; cursor: pointer;
+}
+.lang-toggle button:hover { color: inherit; }
+.lang-toggle button[aria-pressed="true"] { background: var(--ia-accent); color: var(--ia-accent-contrast); cursor: default; }
+.lang-toggle button:focus-visible { outline: 2px solid var(--bk-focus, var(--ia-accent-2)); outline-offset: 1px; }
+/* Keep the last sidebar entries clear of the toggle. */
+html[data-language] .sidebar-scrollbox { padding-bottom: 4rem; }
